@@ -442,6 +442,10 @@ const TKPI = [
   //         susu:   0.70 (PMC 2024; Grummer 1991 via PMC 4597863)
   //         cokelat:0.62 (PMC 6859180; cocoa butter 57–64% SFA)
   //         nabati/buah: 0.15 (PMC 10340145 Hass avocado USDA)
+  //         ayam/unggas: 0.30 (USDA FoodData Central poultry)
+  //         sapi/kerbau: 0.40 (USDA FoodData Central beef)
+  //         babi:        0.38 (USDA FoodData Central pork)
+  //         ikan:        0.25 (USDA FoodData Central fish)
   //   ⚠ TKPI 2017 TIDAK menyediakan kolom "Gula" maupun "Lemak Jenuh" secara langsung.
   //     Wajib verifikasi dengan uji laboratorium terakreditasi untuk pencantuman label resmi.
   // ────────────────────────────────────────────────────────────────────────────
@@ -498,6 +502,92 @@ const TKPI = [
 
   // 4.12 Bumbu
   {id:"R01",name:"Jahe, segar",alt:"fresh ginger jahe segar",cat:"Rempah & Bumbu",tkpi:"NR018",g:10.1,na:12,lj:0.2,fat:1.0,kh:10.1},
+
+  // ═══ 4.4 SAYURAN DAN HASIL OLAHANNYA ═══════════════════════════════════
+  // DR008 Bayam segar: KH=2.9 SERAT=0.7 LEMAK=0.4 Na=16
+  {id:"V01",name:"Bayam, segar",alt:"spinach bayam hijau segar fresh",cat:"Sayuran",tkpi:"DR008",g:2.2,na:16,lj:0.1,fat:0.4,kh:2.9},
+  // DR009 Bayam merah: KH=6.3 SERAT=2.2 LEMAK=0.8 Na=20
+  {id:"V02",name:"Bayam merah, segar",alt:"red amaranth bayam merah segar",cat:"Sayuran",tkpi:"DR009",g:4.1,na:20,lj:0.1,fat:0.8,kh:6.3},
+  // DR010 Bit segar: KH=9.6 SERAT=2.6 LEMAK=0.1 Na=29
+  {id:"V03",name:"Bit, segar",alt:"beetroot beet bit merah segar fresh",cat:"Sayuran",tkpi:"DR010",g:7.0,na:29,lj:0.0,fat:0.1,kh:9.6},
+  // DR071 Daun singkong segar: KH=7.1 SERAT=2.4 LEMAK=1.1 Na=17
+  {id:"V04",name:"Daun singkong, segar",alt:"cassava leaf daun singkong segar ubi kayu",cat:"Sayuran",tkpi:"DR071",g:4.7,na:17,lj:0.2,fat:1.1,kh:7.1},
+  // DR100 Kangkung segar: KH=3.9 SERAT=2.0 LEMAK=0.7 Na=65
+  {id:"V05",name:"Kangkung, segar",alt:"water spinach kangkung segar fresh",cat:"Sayuran",tkpi:"DR100",g:1.9,na:65,lj:0.1,fat:0.7,kh:3.9},
+  // DR109 Ketimun/Timun segar: KH=1.4 SERAT=0.3 LEMAK=0.2 Na=2
+  {id:"V06",name:"Ketimun / Timun, segar",alt:"cucumber timun ketimun mentimun segar fresh",cat:"Sayuran",tkpi:"DR109",g:1.1,na:2,lj:0.0,fat:0.2,kh:1.4},
+  // DR121 Labu air segar: KH=3.8 SERAT=0.6 LEMAK=0.2 Na=2
+  {id:"V07",name:"Labu air, segar",alt:"bottle gourd labu air segar",cat:"Sayuran",tkpi:"DR121",g:3.2,na:2,lj:0.0,fat:0.2,kh:3.8},
+  // DR122 Labu kuning segar: KH=10.0 SERAT=2.7 LEMAK=0.5 Na=280
+  {id:"V08",name:"Labu kuning, segar",alt:"pumpkin labu kuning waluh segar fresh",cat:"Sayuran",tkpi:"DR122",g:7.3,na:280,lj:0.1,fat:0.5,kh:10.0},
+  // DR147 Seledri segar: KH=4.6 SERAT=2.0 LEMAK=0.1 Na=64
+  {id:"V09",name:"Seledri, segar",alt:"celery seledri segar fresh",cat:"Sayuran",tkpi:"DR147",g:2.6,na:64,lj:0.0,fat:0.1,kh:4.6},
+  // DR154 Terong segar: KH=5.5 SERAT=2.1 LEMAK=0.2 Na=9
+  {id:"V10",name:"Terong, segar",alt:"eggplant terong aubergine segar fresh",cat:"Sayuran",tkpi:"DR154",g:3.4,na:9,lj:0.0,fat:0.2,kh:5.5},
+  // DR161 Tomat merah segar: KH=4.7 SERAT=1.5 LEMAK=0.5 Na=10
+  {id:"V11",name:"Tomat merah, segar",alt:"tomato tomat merah segar fresh",cat:"Sayuran",tkpi:"DR161",g:3.2,na:10,lj:0.1,fat:0.5,kh:4.7},
+  // DR160 Tomat, air (sari) segar: KH=3.5 SERAT=0.4 LEMAK=0.2 Na=10
+  {id:"V12",name:"Tomat, sari / jus, segar",alt:"tomato juice sari tomat jus fresh pressed",cat:"Sayuran",tkpi:"DR160",g:3.1,na:10,lj:0.0,fat:0.2,kh:3.5},
+  // DR166 Wortel segar: KH=7.9 SERAT=1.0 LEMAK=0.6 Na=70
+  {id:"V13",name:"Wortel, segar",alt:"carrot wortel segar fresh",cat:"Sayuran",tkpi:"DR166",g:6.9,na:70,lj:0.1,fat:0.6,kh:7.9},
+  // NR007 Bawang merah segar (4.12 Bumbu): KH=9.2 SERAT=1.7 LEMAK=0.3 Na=7
+  {id:"V14",name:"Bawang merah, segar",alt:"shallot bawang merah segar fresh onion",cat:"Sayuran",tkpi:"NR007",g:7.5,na:7,lj:0.0,fat:0.3,kh:9.2},
+  // NR008 Bawang putih segar: KH=23.1 SERAT=0.6 LEMAK=0.2 Na=46
+  {id:"V15",name:"Bawang putih, segar",alt:"garlic bawang putih segar fresh",cat:"Sayuran",tkpi:"NR008",g:22.5,na:46,lj:0.0,fat:0.2,kh:23.1},
+  // NR018 Jahe already in database as R01
+
+  // ═══ 4.2 UMBI BERPATI ════════════════════════════════════════════════════
+  // BR013 Kentang segar: KH=13.5 SERAT=0.5 LEMAK=0.2 Na=7 (starch dominant, g~0 for sugar)
+  {id:"U01",name:"Kentang, segar",alt:"potato kentang segar fresh",cat:"Umbi & Serealia",tkpi:"BR013",g:0.5,na:7,lj:0.0,fat:0.2,kh:13.5},
+  // BR016 Singkong/Ubi kayu segar: KH=36.8 SERAT=0.9 LEMAK=0.3 Na=2 (mostly starch)
+  {id:"U02",name:"Singkong / ubi kayu, segar",alt:"cassava singkong ubi kayu ketela segar fresh",cat:"Umbi & Serealia",tkpi:"BR016",g:0.9,na:2,lj:0.0,fat:0.3,kh:36.8},
+  // BR025 Talas bogor segar: KH=25.0 SERAT=0.9 LEMAK=0.4 Na=10 (mostly starch)
+  {id:"U03",name:"Talas, segar",alt:"taro talas bogor segar fresh",cat:"Umbi & Serealia",tkpi:"BR025",g:0.9,na:10,lj:0.1,fat:0.4,kh:25.0},
+  // AR001 Beras giling mentah: KH=77.1 SERAT=0.2 LEMAK=1.7 Na=27 (starch — g~0 for sugar)
+  {id:"U04",name:"Beras giling, mentah",alt:"white rice beras giling nasi mentah raw",cat:"Umbi & Serealia",tkpi:"AR001",g:0.2,na:27,lj:0.3,fat:1.7,kh:77.1},
+
+  // ═══ 4.3 KACANG, BIJI, BEAN DAN HASIL OLAHANNYA ═══════════════════════
+  // CR017 Kacang kedelai kering: KH=24.9 SERAT=3.2 LEMAK=16.7 Na=210
+  // Soybean fat: ~15% saturated (mostly PUFA/MUFA)
+  {id:"K01",name:"Kacang kedelai, kering",alt:"soybean kedelai kering dried",cat:"Kacang & Olahan",tkpi:"CR017",g:21.7,na:210,lj:2.5,fat:16.7,kh:24.9},
+  // CP060 Susu kedelai: KH=5.0 SERAT=0.2 LEMAK=2.5 Na=128
+  {id:"K02",name:"Susu kedelai",alt:"soy milk susu kedelai plant milk",cat:"Kacang & Olahan",tkpi:"CP060",g:4.8,na:128,lj:0.4,fat:2.5,kh:5.0},
+  // CR014 Kacang hijau kering: KH=56.8 SERAT=7.5 LEMAK=1.5 Na=42
+  {id:"K03",name:"Kacang hijau, kering",alt:"mung bean kacang hijau kering dried",cat:"Kacang & Olahan",tkpi:"CR014",g:49.3,na:42,lj:0.2,fat:1.5,kh:56.8},
+  // CP061 Tahu mentah: KH=0.8 SERAT=0.1 LEMAK=4.7 Na=2
+  {id:"K04",name:"Tahu, mentah",alt:"tofu tahu mentah fresh silken firm",cat:"Kacang & Olahan",tkpi:"CP061",g:0.7,na:2,lj:0.7,fat:4.7,kh:0.8},
+
+  // ═══ 4.6 DAGING, UNGGAS DAN HASIL OLAHANNYA ════════════════════════════
+  // Saturation factor for poultry: 0.30 (USDA), beef/ruminant: 0.40, pork: 0.38
+  // FR005 Ayam, daging, segar: KH=0 LEMAK=25.0 Na=109
+  {id:"D01",name:"Ayam, daging, segar",alt:"chicken meat ayam daging segar fresh",cat:"Daging & Unggas",tkpi:"FR005",g:0.0,na:109,lj:7.5,fat:25.0,kh:0.0},
+  // FR021 Kerbau, daging, segar: KH=0 LEMAK=0.5 Na=91
+  {id:"D02",name:"Kerbau, daging, segar",alt:"buffalo meat kerbau daging segar",cat:"Daging & Unggas",tkpi:"FR021",g:0.0,na:91,lj:0.2,fat:0.5,kh:0.0},
+  // FR024 (Sapi, daging, segar — unnamed in TKPI): KH=0 LEMAK=22.0 Na=93
+  {id:"D03",name:"Sapi, daging, segar",alt:"beef meat sapi daging segar fresh",cat:"Daging & Unggas",tkpi:"FR024",g:0.0,na:93,lj:8.8,fat:22.0,kh:0.0},
+  // FR025 (Sapi, daging — lean cut): KH=0 LEMAK=10.0 Na=83
+  {id:"D04",name:"Sapi, daging tanpa lemak, segar",alt:"lean beef sapi tanpa lemak daging segar",cat:"Daging & Unggas",tkpi:"FR025",g:0.0,na:83,lj:4.0,fat:10.0,kh:0.0},
+  // FR010 Babi, ginjal, segar: KH=0.8 LEMAK=4.6 Na=139
+  {id:"D05",name:"Babi, ginjal, segar",alt:"pork kidney babi ginjal segar",cat:"Daging & Unggas",tkpi:"FR010",g:0.0,na:139,lj:1.7,fat:4.6,kh:0.8},
+  // FR011 Babi, hati, segar: KH=1.7 LEMAK=4.8 Na=110
+  {id:"D06",name:"Babi, hati, segar",alt:"pork liver babi hati segar",cat:"Daging & Unggas",tkpi:"FR011",g:0.0,na:110,lj:1.8,fat:4.8,kh:1.7},
+  // FR012 (unnamed, Babi daging berlemak): KH=0 LEMAK=28.6 Na=54
+  {id:"D07",name:"Babi, daging, segar",alt:"pork meat babi daging segar fresh",cat:"Daging & Unggas",tkpi:"FR012",g:0.0,na:54,lj:10.9,fat:28.6,kh:0.0},
+  // FR023 Sapi, babat, segar: KH=0 LEMAK=4.2 Na=147
+  {id:"D08",name:"Sapi, babat, segar",alt:"beef tripe sapi babat segar",cat:"Daging & Unggas",tkpi:"FR023",g:0.0,na:147,lj:1.7,fat:4.2,kh:0.0},
+
+  // ═══ 4.7 IKAN, KERANG, UDANG DAN HASIL OLAHANNYA ═══════════════════════
+  // Fish fat saturation factor: 0.25 (USDA ~20-30%)
+  // GR007 Ikan bandeng segar: KH=0 LEMAK=4.8 Na=67
+  {id:"F01",name:"Ikan bandeng, segar",alt:"milkfish bandeng ikan segar fresh",cat:"Ikan & Seafood",tkpi:"GR007",g:0.0,na:67,lj:1.2,fat:4.8,kh:0.0},
+  // GR030 Ikan kakap segar: KH=0 LEMAK=0.7 Na=0 (Na blank in TKPI, use 0)
+  {id:"F02",name:"Ikan kakap, segar",alt:"red snapper kakap ikan segar fresh",cat:"Ikan & Seafood",tkpi:"GR030",g:0.0,na:0,lj:0.2,fat:0.7,kh:0.0},
+  // GR068 Ikan teri segar: KH=4.1 LEMAK=1.4 Na=554
+  {id:"F03",name:"Ikan teri, segar",alt:"anchovy teri ikan kecil segar fresh",cat:"Ikan & Seafood",tkpi:"GR068",g:0.0,na:554,lj:0.4,fat:1.4,kh:4.1},
+  // GR083 Udang besar segar: KH=1.2 LEMAK=0.6 Na=190
+  {id:"F04",name:"Udang, segar",alt:"shrimp prawn udang segar fresh",cat:"Ikan & Seafood",tkpi:"GR083",g:0.0,na:190,lj:0.2,fat:0.6,kh:1.2},
+  // GR003 Cumi-cumi segar: KH=0.1 LEMAK=0.7 Na=37
+  {id:"F05",name:"Cumi-cumi, segar",alt:"squid cumi cumi segar fresh",cat:"Ikan & Seafood",tkpi:"GR003",g:0.0,na:37,lj:0.2,fat:0.7,kh:0.1},
 ];
 
 // ============================================================

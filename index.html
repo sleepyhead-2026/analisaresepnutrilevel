@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulator Nutri-Level Indonesia</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --green-dark:#1a7a4a;--green-mid:#5aab2e;--yellow:#f5a623;--red:#d0212a;
+    --green-dark-bg:#0d5c36;--yellow-bg:#d4880a;
+    --page-bg:#f2f4f0;--card-bg:#ffffff;
+    --text-primary:#1a1c18;--text-secondary:#5a5f52;--text-muted:#8a9080;
+    --border:#dde0d8;
+  }
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--page-bg);color:var(--text-primary);min-height:100vh}
+  header{background:#fff;border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:1rem;height:64px;position:sticky;top:0;z-index:100}
+  .logo-mark{width:36px;height:36px;background:var(--green-dark);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:Arial Black,sans-serif;font-size:18px;color:white;font-weight:900;letter-spacing:-1px}
+  .logo-text{font-size:15px;font-weight:700}.logo-sub{font-size:11px;color:var(--text-muted);margin-top:1px}
+  .header-badge{margin-left:auto;font-size:11px;background:#e8f5ee;color:var(--green-dark);border:1px solid #b8dfc9;border-radius:20px;padding:4px 12px;font-weight:600}
+  main{max-width:1100px;margin:0 auto;padding:2.5rem 2rem;display:grid;grid-template-columns:1fr 420px;gap:2rem;align-items:start}
+  @media(max-width:800px){main{grid-template-columns:1fr}}
+  .section-eyebrow{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--green-dark);margin-bottom:6px}
+  .section-title{font-size:26px;font-weight:700;line-height:1.25;margin-bottom:8px}
+  .section-desc{font-size:14px;color:var(--text-secondary);line-height:1.6;margin-bottom:1.5rem}
+  /* MODE TABS */
+  .mode-tabs{display:flex;background:#eef0eb;border-radius:14px;padding:4px;margin-bottom:2rem;gap:4px}
+  .mode-tab{flex:1;padding:10px 16px;border:none;border-radius:10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;background:transparent;color:var(--text-muted);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px}
+  .mode-tab.active{background:#fff;color:var(--green-dark);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+  .mode-tab:hover:not(.active){background:#e4e7df}
+  /* STEP NAV */
+  .step-nav{display:flex;align-items:center;gap:6px;margin-bottom:2rem}
+  .step-pill{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text-muted)}
+  .step-num{width:24px;height:24px;border-radius:50%;background:var(--border);color:var(--text-muted);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;transition:all .2s}
+  .step-pill.done .step-num,.step-pill.active .step-num{background:var(--green-dark);color:#fff}
+  .step-pill.active{color:var(--green-dark)}
+  .step-line{flex:1;height:1px;background:var(--border)}.step-line.done{background:var(--green-dark)}
+  /* CARDS */
+  .card{background:var(--card-bg);border:1px solid var(--border);border-radius:18px;padding:1.75rem;margin-bottom:1rem}
+  .card-title{font-size:16px;font-weight:700;margin-bottom:4px}
+  .card-hint{font-size:13px;color:var(--text-secondary);line-height:1.55;margin-bottom:1.25rem}
+  /* RADIO */
+  .radio-group{display:flex;flex-direction:column;gap:8px}
+  .radio-opt{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1.5px solid var(--border);border-radius:12px;cursor:pointer;transition:all .15s}
+  .radio-opt:hover{border-color:#9cc9b0;background:#f8fdf9}
+  .radio-opt.selected{border-color:var(--green-dark);background:#eaf7f0}
+  .radio-opt input[type=radio]{margin-top:2px;accent-color:var(--green-dark);width:16px;height:16px;flex-shrink:0}
+  .radio-opt-title{font-size:14px;font-weight:600}.radio-opt-desc{font-size:12px;color:var(--text-secondary);margin-top:2px}
+  /* INPUTS */
+  .input-group{margin-bottom:1.25rem}
+  .input-label{font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;display:block}
+  .input-row{display:flex;align-items:center;gap:8px}
+  .input-row input[type=number]{width:120px;padding:10px 12px;font-size:16px;font-family:inherit;font-weight:600;border:1.5px solid var(--border);border-radius:10px;background:#fff;color:var(--text-primary);transition:border-color .15s;outline:none}
+  input:focus,select:focus{border-color:var(--green-dark) !important;box-shadow:0 0 0 3px #d0ede0}
+  input::placeholder{color:#c0c8bc;font-weight:400}
+  .input-unit{font-size:13px;color:var(--text-muted);font-weight:500}
+  .input-note{font-size:11px;color:var(--text-muted);margin-top:4px}
+  /* BUTTONS */
+  .btn-row{display:flex;gap:8px;margin-top:1.5rem;flex-wrap:wrap}
+  .btn-primary{background:var(--green-dark);color:#fff;border:none;border-radius:10px;padding:11px 22px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s,transform .1s}
+  .btn-primary:hover{background:#155e37}.btn-primary:active{transform:scale(.97)}.btn-primary:disabled{background:#b0c4b8;cursor:not-allowed}
+  .btn-secondary{background:#fff;color:var(--text-secondary);border:1.5px solid var(--border);border-radius:10px;padding:11px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
+  .btn-secondary:hover{background:#f5f7f3}
+  .btn-download{background:var(--green-dark);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;transition:background .15s;width:100%}
+  .btn-download:hover{background:#155e37}.btn-download svg{width:16px;height:16px}
+  /* PANELS */
+  .step-panel{display:none}.step-panel.active{display:block;animation:fadeIn .2s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  /* REF TABLE */
+  .ref-table{width:100%;font-size:12px;border-collapse:collapse;margin-top:.5rem}
+  .ref-table th{padding:7px 10px;font-weight:700;text-align:center}
+  .ref-table td{padding:6px 10px;border-top:1px solid var(--border)}
+  .ref-table td:first-child{font-weight:600;color:var(--text-secondary)}
+  .ref-table td:not(:first-child){text-align:center;color:var(--text-secondary)}
+  .ref-th-A{color:var(--green-dark)}.ref-th-B{color:var(--green-mid)}.ref-th-C{color:var(--yellow-bg)}.ref-th-D{color:var(--red)}
+  /* PREVIEW */
+  .preview-panel{position:sticky;top:84px}
+  .preview-card{background:var(--card-bg);border:1px solid var(--border);border-radius:18px;padding:1.75rem;margin-bottom:1rem}
+  .preview-title{font-size:13px;font-weight:700;color:var(--text-secondary);margin-bottom:1rem;text-transform:uppercase;letter-spacing:.06em}
+  /* BREAKDOWN */
+  .breakdown-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .breakdown-row:last-child{border-bottom:none}
+  .br-label{flex:1;color:var(--text-secondary);font-weight:500}.br-val{font-weight:700;min-width:60px;text-align:right}
+  .br-badge{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:Arial Black,sans-serif;font-size:12px;color:#fff;font-weight:900;flex-shrink:0}
+  .preview-placeholder{text-align:center;padding:2rem 1rem;color:var(--text-muted);font-size:13px;line-height:1.6}
+  .preview-placeholder .ph-icon{font-size:40px;display:block;margin-bottom:10px;filter:grayscale(1);opacity:.4}
+  .info-box{background:#eaf7f0;border:1px solid #b8dfc9;border-radius:10px;padding:10px 14px;font-size:12px;color:#0d5c36;line-height:1.55;margin-top:.75rem}
+  footer{text-align:center;padding:2rem;font-size:12px;color:var(--text-muted);border-top:1px solid var(--border);margin-top:2rem}
+  #label-canvas-wrapper{position:absolute;left:-9999px;top:-9999px;width:400px;padding:24px;background:white}
+  /* ===== RECIPE ANALYSER ===== */
+  .input-text-full{width:100%;padding:11px 14px;font-size:14px;font-family:inherit;font-weight:600;border:1.5px solid var(--border);border-radius:12px;background:#fff;color:var(--text-primary);outline:none;transition:border-color .15s;margin-top:6px;display:block}
+  .input-text-full::placeholder{color:#c0c8bc;font-weight:400}
+  .vol-row{display:flex;align-items:center;gap:8px;margin-top:6px}
+  .vol-row input{width:130px;padding:10px 12px;font-size:16px;font-family:inherit;font-weight:700;border:1.5px solid var(--border);border-radius:10px;background:#fff;outline:none;color:var(--text-primary)}
+  /* SEARCH */
+  .search-container{position:relative}
+  .search-wrap{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:12px;background:#fff;overflow:hidden;transition:border-color .15s,box-shadow .15s}
+  .search-wrap:focus-within{border-color:var(--green-dark);box-shadow:0 0 0 3px #d0ede0}
+  .search-wrap input{flex:1;padding:11px 14px;font-size:14px;font-family:inherit;border:none;outline:none;background:transparent;color:var(--text-primary);box-shadow:none !important}
+  .search-wrap input::placeholder{color:#b0b8ab}
+  .s-icon{padding:0 14px;color:var(--text-muted);font-size:16px;flex-shrink:0}
+  .search-dd{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1.5px solid var(--border);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:50;max-height:290px;overflow-y:auto;display:none}
+  .search-dd.open{display:block}
+  .dd-item{padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--border);transition:background .1s}
+  .dd-item:last-child{border-bottom:none}.dd-item:hover{background:#f0f7f3}
+  .dd-name{font-size:14px;font-weight:600;color:var(--text-primary)}
+  .dd-cat{font-size:11px;color:var(--text-muted);margin-top:1px}
+  .dd-nutr{font-size:11px;color:var(--text-secondary);margin-top:2px}
+  .dd-empty{padding:14px;font-size:13px;color:var(--text-muted);text-align:center}
+  /* CHIP */
+  .sel-chip{display:none;align-items:center;gap:8px;padding:9px 12px;background:#eaf7f0;border:1.5px solid var(--green-dark);border-radius:10px;margin-top:8px}
+  .sel-chip.show{display:flex}
+  .sc-name{flex:1;font-size:13px;font-weight:600;color:var(--green-dark)}
+  .sc-nutr{font-size:11px;color:var(--text-secondary)}
+  .sc-clear{width:20px;height:20px;border-radius:50%;border:none;background:#b8dfc9;color:#0d5c36;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1}
+  /* ADD ROW */
+  .add-row{display:flex;gap:8px;margin-top:10px;align-items:center;flex-wrap:wrap}
+  .qty-inp{width:90px;padding:10px 12px;font-size:14px;font-family:inherit;font-weight:700;border:1.5px solid var(--border);border-radius:10px;background:#fff;color:var(--text-primary);outline:none}
+  .unit-sel{padding:10px 8px;font-size:13px;font-family:inherit;border:1.5px solid var(--border);border-radius:10px;background:#fff;color:var(--text-primary);outline:none;cursor:pointer}
+  /* INGREDIENT LIST */
+  .ing-list{display:flex;flex-direction:column;gap:6px}
+  .ing-item{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#f8fdf9;border:1px solid #d0edd8;border-radius:10px}
+  .ing-info{flex:1;min-width:0}
+  .ing-name{font-size:13px;font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ing-qty{font-size:11px;color:var(--text-secondary);margin-top:1px}
+  .ing-badges{display:flex;gap:4px;flex-shrink:0}
+  .ib{font-size:10px;font-weight:700;padding:2px 6px;border-radius:6px;white-space:nowrap}
+  .ib-g{background:#fef9c3;color:#92400e}.ib-na{background:#e0f2fe;color:#075985}.ib-lj{background:#fce7f3;color:#9d174d}
+  .btn-rm{width:22px;height:22px;border-radius:50%;border:none;background:#fee2e2;color:#dc2626;cursor:pointer;font-size:15px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .btn-rm:hover{background:#fca5a5}
+  .ing-empty{padding:1.5rem;text-align:center;color:var(--text-muted);font-size:13px;background:#f8fdf9;border:1.5px dashed var(--border);border-radius:12px;line-height:1.6}
+  /* SSF SUMMARY */
+  .ssf-card{background:var(--card-bg);border:1.5px solid var(--border);border-radius:14px;padding:1rem 1.25rem;margin-bottom:1rem}
+  .ssf-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .ssf-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);flex:1}
+  .live-badge{font-size:13px;font-weight:900;padding:4px 12px;border-radius:20px;font-family:Arial Black,sans-serif;transition:all .3s}
+  .ssf-note{font-size:11px;color:var(--text-muted);margin-bottom:10px}
+  .ssf-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
+  .ssf-item{text-align:center;padding:10px 6px;border-radius:10px;border:1px solid var(--border);transition:all .3s}
+  .ssf-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);font-weight:700}
+  .ssf-val{font-size:20px;font-weight:700;line-height:1.2;margin-top:2px}
+  .ssf-unit{font-size:10px;color:var(--text-muted)}
+  .ssf-lv{font-size:11px;font-weight:700;margin-top:4px;padding:2px 8px;border-radius:20px;display:inline-block}
+  /* RECIPE BADGE */
+  .r-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:12px}
+  .reg-note{font-size:12px;color:var(--text-secondary);line-height:1.6}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-mark">NL</div>
+  <div>
+    <div class="logo-text">Kalkulator Nutri-Level</div>
+    <div class="logo-sub">Indonesia &middot; KMK HK.01.07/MENKES/301/2026</div>
+  </div>
+  <div class="header-badge">Minuman Siap Saji</div>
+</header>
+
+<main>
+<div class="left-panel">
+  <div class="section-eyebrow">Berdasarkan regulasi resmi</div>
+  <h1 class="section-title" id="mainTitle">Tentukan Nutri-Level<br>minuman Anda</h1>
+  <p class="section-desc" id="mainDesc">Isi kandungan gizi per 100 ml untuk menentukan klasifikasi A&ndash;D dan mengunduh label resmi sesuai KMK No. HK.01.07/MENKES/301/2026.</p>
+
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tab-manual" onclick="switchMode('manual')">&#9998; Input Manual</button>
+    <button class="mode-tab" id="tab-recipe" onclick="switchMode('recipe')">&#129514; Analisa Resep (TKPI 2017)</button>
+  </div>
+
+  <!-- ═══════════ RECIPE SECTION ═══════════ -->
+  <div id="recipe-section" style="display:none">
+    <div class="step-nav">
+      <div class="step-pill active" id="rpill0"><div class="step-num">1</div>Info Minuman</div>
+      <div class="step-line" id="rline01"></div>
+      <div class="step-pill" id="rpill1"><div class="step-num">2</div>Tambah Bahan</div>
+      <div class="step-line" id="rline12"></div>
+      <div class="step-pill" id="rpill2"><div class="step-num">3</div>Hasil</div>
+    </div>
+
+    <!-- rPanel 0: Info + Pemanis -->
+    <div class="step-panel active" id="rPanel0">
+      <div class="card">
+        <div class="card-title">Informasi minuman</div>
+        <div class="card-hint">Masukkan nama produk dan volume per sajian. Semua nilai GGL akan dinormalkan ke per 100 ml dari volume ini.</div>
+        <div class="input-group">
+          <label class="input-label">Nama produk / minuman</label>
+          <input type="text" class="input-text-full" id="r-name" placeholder="mis. Kopi Susu Gula Aren 350 ml">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Volume per sajian (ml) <span style="color:var(--red)">*</span></label>
+          <div class="vol-row">
+            <input type="number" id="r-volume" min="10" max="5000" step="10" value="350">
+            <span class="input-unit">mL</span>
+          </div>
+          <div class="input-note">Total volume satu sajian. Sertakan semua bahan cair termasuk air dan es.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Penggunaan bahan tambahan pemanis</div>
+        <div class="card-hint">Apakah resep menggunakan pemanis tambahan di luar pemanis alami bawaan bahan?</div>
+        <div class="radio-group">
+          <label class="radio-opt" id="ropt-no"><input type="radio" name="r-pemanis" value="no">
+            <div><div class="radio-opt-title">Tidak mengandung pemanis tambahan</div><div class="radio-opt-desc">Hanya pemanis alami bawaan bahan (mis. laktosa susu, fruktosa buah)</div></div>
+          </label>
+          <label class="radio-opt" id="ropt-alami"><input type="radio" name="r-pemanis" value="alami">
+            <div><div class="radio-opt-title">Menggunakan pemanis alami tambahan</div><div class="radio-opt-desc">Stevia, sorbitol, xylitol, eritritol, atau sejenisnya ditambahkan ke resep</div></div>
+          </label>
+          <label class="radio-opt" id="ropt-buatan"><input type="radio" name="r-pemanis" value="buatan">
+            <div><div class="radio-opt-title">Menggunakan pemanis buatan</div><div class="radio-opt-desc">Aspartam, sakarin, sukralosa, asesulfam-K, atau sejenisnya</div></div>
+          </label>
+        </div>
+        <div class="btn-row"><button class="btn-primary" id="r-btn-next0" disabled onclick="goToRecipeStep(1)">Lanjut: Tambah Bahan &rarr;</button></div>
+      </div>
+    </div>
+
+    <!-- rPanel 1: Add Ingredients -->
+    <div class="step-panel" id="rPanel1">
+      <div class="card">
+        <div class="card-title">Tambah bahan minuman</div>
+        <div class="card-hint">Cari bahan dari database <strong>TKPI 2017</strong>, masukkan jumlah yang digunakan per sajian, lalu klik Tambah. Sertakan <em>semua</em> bahan termasuk air dan es.</div>
+
+        <div class="input-group">
+          <label class="input-label">Cari bahan (database TKPI 2017)</label>
+          <div class="search-container">
+            <div class="search-wrap">
+              <span class="s-icon">&#128269;</span>
+              <input type="text" id="r-search" placeholder="Ketik nama bahan, mis. susu, kopi, gula aren, santan&hellip;" oninput="searchTKPI(this.value)" autocomplete="off" onkeydown="searchKeydown(event)">
+            </div>
+            <div class="search-dd" id="r-search-dd"></div>
+          </div>
+          <div class="sel-chip" id="r-sel-chip">
+            <span class="sc-name" id="chip-name"></span>
+            <span class="sc-nutr" id="chip-nutr"></span>
+            <button class="sc-clear" onclick="clearSelIng()" title="Hapus pilihan">&times;</button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Jumlah yang digunakan</label>
+          <div class="add-row">
+            <input type="number" class="qty-inp" id="r-qty" min="0.1" step="0.5" placeholder="0" onkeydown="if(event.key==='Enter')addIngredient()">
+            <select class="unit-sel" id="r-unit">
+              <option value="g">gram (g)</option>
+              <option value="ml">mililiter (ml)</option>
+              <option value="sdm">sdm (15 g)</option>
+              <option value="sdt">sdt (5 g)</option>
+            </select>
+            <button class="btn-primary" onclick="addIngredient()">+ Tambah</button>
+          </div>
+          <div class="input-note">Untuk bahan cair: 1 ml &asymp; 1 g &nbsp;&middot;&nbsp; sdm = sendok makan &nbsp;&middot;&nbsp; sdt = sendok teh</div>
+        </div>
+
+        <div id="r-ing-list">
+          <div class="ing-empty">&#x1F964; Belum ada bahan ditambahkan.<br>Cari bahan di atas dan klik Tambah.</div>
+        </div>
+      </div>
+
+      <div class="ssf-card" id="r-ssf-card" style="display:none">
+        <div class="ssf-top">
+          <div class="ssf-title">&#128202; Estimasi per 100 ml</div>
+          <div class="live-badge" id="live-badge">&mdash;</div>
+        </div>
+        <div class="ssf-note" id="r-ssf-note"></div>
+        <div class="ssf-grid" id="r-ssf-grid"></div>
+        <div style="font-size:11px;color:#0d5c36;background:#eaf7f0;border:1px solid #b8dfc9;border-radius:8px;padding:8px 12px;line-height:1.5">
+          &#9888;&#65039; Estimasi berbasis TKPI 2017. Wajib diverifikasi dengan uji laboratorium terakreditasi sebelum pencantuman label resmi.
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goToRecipeStep(0)">&larr; Kembali</button>
+        <button class="btn-primary" id="r-btn-calc" disabled onclick="calcFromRecipe()">&#128300; Hitung Nutri-Level &rarr;</button>
+      </div>
+    </div>
+
+    <!-- rPanel 2: Results -->
+    <div class="step-panel" id="rPanel2">
+      <div class="card">
+        <div id="r-src-badge"></div>
+        <div class="card-title">Rincian klasifikasi</div>
+        <div id="r-breakdown"></div>
+        <div class="info-box" id="r-result-info" style="margin-top:1rem"></div>
+      </div>
+      <div class="card" style="background:#f8fdf9">
+        <div class="reg-note"><strong>Catatan regulasi:</strong> Nutri-level wajib dicantumkan pada daftar menu, kemasan, brosur, dan aplikasi elektronik. Berlaku untuk pelaku usaha skala besar setelah 2 tahun sejak penetapan batas maksimal kandungan GGL.</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="backToIngredients()">&larr; Edit Bahan</button>
+        <button class="btn-secondary" onclick="resetAll()">Hitung Ulang</button>
+      </div>
+    </div>
+  </div><!-- END RECIPE SECTION -->
+
+  <!-- ═══════════ MANUAL SECTION ═══════════ -->
+  <div id="manual-section">
+    <div class="step-nav">
+      <div class="step-pill active" id="pill0"><div class="step-num">1</div>Pemanis</div>
+      <div class="step-line" id="line01"></div>
+      <div class="step-pill" id="pill1"><div class="step-num">2</div>Gula &amp; Garam</div>
+      <div class="step-line" id="line12"></div>
+      <div class="step-pill" id="pill2"><div class="step-num">3</div>Lemak</div>
+      <div class="step-line" id="line23"></div>
+      <div class="step-pill" id="pill3"><div class="step-num">4</div>Hasil</div>
+    </div>
+
+    <div class="step-panel active" id="panel0">
+      <div class="card">
+        <div class="card-title">Penggunaan bahan tambahan pemanis</div>
+        <div class="card-hint">Termasuk pemanis alami (stevia, sorbitol, xylitol) dan pemanis buatan (aspartam, sakarin, sukralosa), baik ditambahkan langsung maupun ikutan (carry over).</div>
+        <div class="radio-group">
+          <label class="radio-opt" id="opt-no"><input type="radio" name="pemanis" value="no">
+            <div><div class="radio-opt-title">Tidak mengandung pemanis tambahan</div><div class="radio-opt-desc">Hanya pemanis alami bawaan bahan (mis. laktosa, fruktosa alami dari buah)</div></div>
+          </label>
+          <label class="radio-opt" id="opt-alami"><input type="radio" name="pemanis" value="alami">
+            <div><div class="radio-opt-title">Menggunakan pemanis alami tambahan</div><div class="radio-opt-desc">Stevia, sorbitol, xylitol, eritritol, atau sejenisnya ditambahkan</div></div>
+          </label>
+          <label class="radio-opt" id="opt-buatan"><input type="radio" name="pemanis" value="buatan">
+            <div><div class="radio-opt-title">Menggunakan pemanis buatan</div><div class="radio-opt-desc">Aspartam, sakarin, sukralosa, asesulfam-K, atau sejenisnya</div></div>
+          </label>
+        </div>
+        <div class="btn-row"><button class="btn-primary" id="btn-next0" disabled onclick="goTo(1)">Lanjut &rarr;</button></div>
+      </div>
+      <div class="card" style="background:#f8fdf9">
+        <div style="font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em">Tabel Referensi Level</div>
+        <table class="ref-table">
+          <thead><tr><th></th><th class="ref-th-A">A</th><th class="ref-th-B">B</th><th class="ref-th-C">C</th><th class="ref-th-D">D</th></tr></thead>
+          <tbody>
+            <tr><td>Gula (g/100ml)</td><td>&le; 1*</td><td>1&ndash;5</td><td>5&ndash;10</td><td>&gt; 10</td></tr>
+            <tr><td>Garam Na (mg/100ml)</td><td>&le; 5</td><td>5&ndash;120</td><td>120&ndash;500</td><td>&gt; 500</td></tr>
+            <tr><td>Lemak jenuh (g/100ml)</td><td>&le; 0,7</td><td>0,7&ndash;1,2</td><td>1,2&ndash;2,8</td><td>&gt; 2,8</td></tr>
+          </tbody>
+        </table>
+        <div class="info-box">* Level A gula hanya untuk produk <em>tanpa pemanis tambahan apapun</em>. Produk berpemanis alami/buatan masuk minimal level B meski gula &le; 1g.</div>
+      </div>
+    </div>
+
+    <div class="step-panel" id="panel1">
+      <div class="card">
+        <div class="card-title">Kandungan gula &amp; garam (natrium)</div>
+        <div class="card-hint">Masukkan kandungan gula total (monosakarida + disakarida, tidak termasuk laktosa) dan natrium per 100 ml.</div>
+        <div class="input-group">
+          <label class="input-label">Kandungan gula per 100 ml</label>
+          <div class="input-row"><input type="number" id="inp-gula" min="0" step="0.1" placeholder="mis. 7.6"><span class="input-unit">g / 100 ml</span></div>
+          <div class="input-note">Total gula &minus; laktosa (jika tercantum pada label)</div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Kandungan natrium per 100 ml</label>
+          <div class="input-row"><input type="number" id="inp-garam" min="0" step="1" placeholder="mis. 80"><span class="input-unit">mg / 100 ml</span></div>
+          <div class="input-note">Dari hasil analisis kandungan natrium</div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="goTo(0)">&larr; Kembali</button>
+          <button class="btn-primary" onclick="goTo(2)">Lanjut &rarr;</button>
+        </div>
+      </div>
+      <div class="card" style="background:#fffbf0;border-color:#f5dea0">
+        <div style="font-size:12px;font-weight:700;color:#8a6a00;margin-bottom:8px">&#128161; Konversi per saji &rarr; per 100 ml</div>
+        <div style="font-size:13px;color:#6a5000;line-height:1.6">Nilai per 100 ml = (Nilai per saji &divide; Volume saji ml) &times; 100<br><span style="color:#8a6a00;font-size:12px">Contoh: 19g gula / 250ml &rarr; 19 &divide; 250 &times; 100 = <strong>7,6 g/100ml</strong></span></div>
+      </div>
+    </div>
+
+    <div class="step-panel" id="panel2">
+      <div class="card">
+        <div class="card-title">Kandungan lemak jenuh</div>
+        <div class="card-hint">Masukkan kandungan lemak jenuh (saturated fat) per 100 ml sesuai hasil uji laboratorium terakreditasi.</div>
+        <div class="input-group">
+          <label class="input-label">Lemak jenuh per 100 ml</label>
+          <div class="input-row"><input type="number" id="inp-lemak" min="0" step="0.1" placeholder="mis. 1.5"><span class="input-unit">g / 100 ml</span></div>
+          <div class="input-note">Dari hasil analisis kandungan lemak jenuh</div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="goTo(1)">&larr; Kembali</button>
+          <button class="btn-primary" onclick="calculate()">Hitung &amp; lihat hasil &rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-panel" id="panel3">
+      <div class="card">
+        <div class="card-title">Rincian klasifikasi</div>
+        <div id="breakdown-rows"></div>
+        <div class="info-box" id="result-info" style="margin-top:1rem"></div>
+      </div>
+      <div class="card" style="background:#f8fdf9">
+        <div class="reg-note"><strong>Catatan regulasi:</strong> Nutri-level wajib dicantumkan pada daftar menu, kemasan, brosur, dan aplikasi elektronik. Berlaku untuk pelaku usaha skala besar setelah 2 tahun sejak penetapan batas maksimal kandungan GGL.</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goTo(2)">&larr; Ubah input</button>
+        <button class="btn-secondary" onclick="resetAll()">Hitung ulang</button>
+      </div>
+    </div>
+  </div><!-- END MANUAL SECTION -->
+</div>
+
+<!-- RIGHT: PREVIEW -->
+<div class="preview-panel">
+  <div class="preview-card">
+    <div class="preview-title">Preview Label</div>
+    <div id="preview-content">
+      <div class="preview-placeholder"><span class="ph-icon">&#127991;</span>Isi form di sebelah kiri untuk melihat preview label Nutri-Level sesuai regulasi.</div>
+    </div>
+  </div>
+  <div class="preview-card" id="download-card" style="display:none">
+    <div class="preview-title">Unduh Label</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button class="btn-download" onclick="downloadLabel('horizontal')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Unduh Label Horizontal
+      </button>
+      <button class="btn-download" style="background:#0d5c36" onclick="downloadLabel('vertical')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Unduh Label Vertikal
+      </button>
+    </div>
+  </div>
+</div>
+</main>
+<div id="label-canvas-wrapper"></div>
+<footer>Berdasarkan KMK RI No. HK.01.07/MENKES/301/2026 &middot; Ditetapkan 14 April 2026 &middot; Data gizi bahan: Tabel Komposisi Pangan Indonesia (TKPI) 2017</footer>
+
+<script>
+// ============================================================
+// TKPI 2017 — Nilai per 100 g bahan
+// g = gula (mono+disakarida, minus laktosa), na = natrium (mg), lj = lemak jenuh (g)
+// ============================================================
+const TKPI = [
+  // Gula & Pemanis
+  {id:'G01',name:'Gula pasir',alt:'gula putih tebu white sugar refined sugar',cat:'Gula & Pemanis',g:99.9,na:1,lj:0.0},
+  {id:'G02',name:'Gula merah / gula jawa',alt:'gula jawa palm sugar coklat brown sugar',cat:'Gula & Pemanis',g:76.1,na:30,lj:0.0},
+  {id:'G03',name:'Gula aren',alt:'aren sugar nira gula kelapa coconut palm sugar',cat:'Gula & Pemanis',g:72.0,na:28,lj:0.0},
+  {id:'G04',name:'Gula kelapa',alt:'coconut sugar gula palem',cat:'Gula & Pemanis',g:70.0,na:45,lj:0.0},
+  {id:'G05',name:'Madu',alt:'honey madu lebah',cat:'Gula & Pemanis',g:82.1,na:5,lj:0.0},
+  {id:'G06',name:'Sirup gula (simple syrup)',alt:'simple syrup sugar syrup air gula larutan',cat:'Gula & Pemanis',g:67.5,na:2,lj:0.0},
+  {id:'G07',name:'Sirup cokelat',alt:'chocolate syrup sirup coklat',cat:'Gula & Pemanis',g:56.0,na:85,lj:0.5},
+  {id:'G08',name:'Sirup karamel',alt:'caramel sauce karamel saus',cat:'Gula & Pemanis',g:59.0,na:115,lj:2.8},
+  {id:'G09',name:'Sirup vanila',alt:'vanilla syrup sirup vanilla',cat:'Gula & Pemanis',g:62.0,na:5,lj:0.0},
+  {id:'G10',name:'Sirup hazelnut',alt:'hazelnut syrup sirup hazelnut',cat:'Gula & Pemanis',g:62.0,na:5,lj:0.0},
+  {id:'G11',name:'Sirup matcha',alt:'matcha syrup sirup matcha',cat:'Gula & Pemanis',g:60.0,na:5,lj:0.0},
+  // Susu & Produk Susu
+  {id:'S01',name:'Susu sapi segar',alt:'fresh milk whole milk susu segar full cream',cat:'Susu & Produk Susu',g:4.8,na:50,lj:2.0},
+  {id:'S02',name:'Susu skim cair',alt:'skim milk low fat milk susu rendah lemak nonfat',cat:'Susu & Produk Susu',g:5.0,na:52,lj:0.1},
+  {id:'S03',name:'Susu UHT full cream',alt:'UHT whole milk susu uht',cat:'Susu & Produk Susu',g:4.5,na:44,lj:2.1},
+  {id:'S04',name:'Susu kental manis',alt:'condensed milk sweetened condensed milk SKM',cat:'Susu & Produk Susu',g:55.0,na:130,lj:3.5},
+  {id:'S05',name:'Susu bubuk full cream',alt:'full cream milk powder susu bubuk',cat:'Susu & Produk Susu',g:37.0,na:400,lj:20.0},
+  {id:'S06',name:'Susu bubuk skim',alt:'skim milk powder non-fat dry milk susu bubuk skim',cat:'Susu & Produk Susu',g:51.0,na:550,lj:0.3},
+  {id:'S07',name:'Susu evaporasi',alt:'evaporated milk susu evap carnation frisian',cat:'Susu & Produk Susu',g:9.5,na:100,lj:3.0},
+  {id:'S08',name:'Creamer nabati bubuk',alt:'non-dairy creamer powder krimer nabati whitener',cat:'Susu & Produk Susu',g:55.0,na:195,lj:22.0},
+  {id:'S09',name:'Susu almond',alt:'almond milk plant based milk',cat:'Susu & Produk Susu',g:1.5,na:72,lj:0.3},
+  {id:'S10',name:'Susu kedelai',alt:'soy milk plant milk',cat:'Susu & Produk Susu',g:1.7,na:51,lj:0.3},
+  {id:'S11',name:'Susu oat',alt:'oat milk plant milk oats',cat:'Susu & Produk Susu',g:3.5,na:60,lj:0.5},
+  {id:'S12',name:'Whipping cream / krim kocok',alt:'heavy cream whipped cream krim kocok double cream',cat:'Susu & Produk Susu',g:3.4,na:38,lj:23.0},
+  {id:'S13',name:'Yogurt plain',alt:'plain yogurt yoghurt greek yogurt',cat:'Susu & Produk Susu',g:4.7,na:60,lj:1.0},
+  {id:'S14',name:'Es krim vanilla',alt:'vanilla ice cream',cat:'Susu & Produk Susu',g:22.0,na:80,lj:7.0},
+  {id:'S15',name:'Keju krim (cream cheese)',alt:'cream cheese krim keju philadelphia',cat:'Susu & Produk Susu',g:2.7,na:321,lj:20.0},
+  {id:'S16',name:'Susu kambing',alt:'goat milk susu kambing',cat:'Susu & Produk Susu',g:4.5,na:50,lj:2.7},
+  // Minuman Dasar
+  {id:'M01',name:'Kopi bubuk (ground coffee)',alt:'kopi bubuk roasted coffee arabica robusta',cat:'Minuman Dasar',g:0.0,na:5,lj:0.0},
+  {id:'M02',name:'Kopi instan',alt:'instant coffee nescafe kopi instan',cat:'Minuman Dasar',g:0.0,na:72,lj:0.0},
+  {id:'M03',name:'Teh hitam kering',alt:'black tea teh kering daun teh',cat:'Minuman Dasar',g:0.0,na:3,lj:0.0},
+  {id:'M04',name:'Teh hijau kering',alt:'green tea teh hijau daun',cat:'Minuman Dasar',g:0.0,na:3,lj:0.0},
+  {id:'M05',name:'Matcha bubuk',alt:'matcha powder teh hijau bubuk green tea powder',cat:'Minuman Dasar',g:0.0,na:7,lj:0.5},
+  {id:'M06',name:'Cokelat bubuk / kakao murni',alt:'cocoa powder chocolate powder cacao coklat kakao',cat:'Minuman Dasar',g:1.8,na:21,lj:4.5},
+  {id:'M07',name:'Dark chocolate (blok/batang)',alt:'dark chocolate coklat hitam dark choc',cat:'Minuman Dasar',g:48.0,na:20,lj:17.0},
+  {id:'M08',name:'Taro bubuk',alt:'taro powder talas bubuk purple yam',cat:'Minuman Dasar',g:55.0,na:40,lj:1.0},
+  {id:'M09',name:'Bubuk minuman cokelat sachet',alt:'chocolate drink powder milo ovaltine nesquik',cat:'Minuman Dasar',g:70.0,na:148,lj:1.5},
+  {id:'M10',name:'Air putih / mineral',alt:'water air putih mineral water',cat:'Minuman Dasar',g:0.0,na:0,lj:0.0},
+  {id:'M11',name:'Es batu',alt:'ice cubes air es batu',cat:'Minuman Dasar',g:0.0,na:0,lj:0.0},
+  {id:'M12',name:'Espresso cair (30 ml shot)',alt:'espresso coffee shot kopi espresso cair',cat:'Minuman Dasar',g:0.0,na:5,lj:0.1},
+  // Lemak & Santan
+  {id:'L01',name:'Santan kental segar',alt:'coconut cream coconut milk thick santan kental',cat:'Lemak & Santan',g:1.5,na:14,lj:13.0},
+  {id:'L02',name:'Santan encer',alt:'thin coconut milk santan encer',cat:'Lemak & Santan',g:1.0,na:8,lj:6.0},
+  {id:'L03',name:'Santan kemasan / kalengan',alt:'canned coconut milk santan kaleng kara',cat:'Lemak & Santan',g:1.5,na:15,lj:13.0},
+  {id:'L04',name:'Minyak kelapa murni (VCO)',alt:'coconut oil virgin coconut oil VCO minyak kelapa',cat:'Lemak & Santan',g:0.0,na:0,lj:82.0},
+  // Buah
+  {id:'B01',name:'Pisang (daging segar)',alt:'banana pisang ambon cavendish',cat:'Buah',g:15.4,na:1,lj:0.1},
+  {id:'B02',name:'Mangga (daging segar)',alt:'mango mangga harum manis',cat:'Buah',g:14.0,na:1,lj:0.0},
+  {id:'B03',name:'Stroberi segar',alt:'strawberry stroberi segar',cat:'Buah',g:4.9,na:1,lj:0.0},
+  {id:'B04',name:'Alpukat (daging)',alt:'avocado alpukat',cat:'Buah',g:0.2,na:7,lj:3.1},
+  {id:'B05',name:'Jus jeruk / jeruk peras',alt:'orange orange juice jeruk segar peras',cat:'Buah',g:9.0,na:1,lj:0.0},
+  {id:'B06',name:'Lemon / jeruk nipis (peras)',alt:'lemon lime jeruk nipis lemon juice',cat:'Buah',g:2.5,na:1,lj:0.0},
+  {id:'B07',name:'Kurma (tanpa biji)',alt:'dates kurma medjool',cat:'Buah',g:63.4,na:1,lj:0.1},
+  {id:'B08',name:'Air kelapa muda',alt:'coconut water kelapa muda air degan',cat:'Buah',g:2.7,na:105,lj:0.0},
+  {id:'B09',name:'Nanas (daging segar)',alt:'pineapple nanas segar',cat:'Buah',g:9.9,na:1,lj:0.0},
+  {id:'B10',name:'Melon (daging)',alt:'melon cantaloupe honeydew',cat:'Buah',g:7.0,na:9,lj:0.0},
+  {id:'B11',name:'Semangka (daging)',alt:'watermelon semangka',cat:'Buah',g:6.2,na:1,lj:0.0},
+  {id:'B12',name:'Blueberry segar',alt:'blueberry beri biru',cat:'Buah',g:10.0,na:1,lj:0.0},
+  {id:'B13',name:'Kelapa parut / daging kelapa',alt:'shredded coconut kelapa parut daging',cat:'Buah',g:5.0,na:20,lj:25.0},
+  // Rempah & Perisa
+  {id:'R01',name:'Jahe segar',alt:'fresh ginger jahe segar',cat:'Rempah & Perisa',g:1.7,na:13,lj:0.0},
+  {id:'R02',name:'Kayu manis bubuk',alt:'cinnamon powder kayu manis bubuk',cat:'Rempah & Perisa',g:2.2,na:10,lj:0.2},
+  {id:'R03',name:'Vanilla ekstrak cair',alt:'vanilla extract perisa vanila',cat:'Rempah & Perisa',g:12.7,na:7,lj:0.0},
+  {id:'R04',name:'Garam dapur',alt:'table salt sodium chloride garam',cat:'Rempah & Perisa',g:0.0,na:38758,lj:0.0},
+  {id:'R05',name:'Kardamom bubuk',alt:'cardamom powder kapulaga',cat:'Rempah & Perisa',g:4.4,na:18,lj:0.7},
+  // Tepung, Pati & Topping
+  {id:'T01',name:'Tepung tapioka kering',alt:'tapioca starch cassava starch tepung kanji sagu',cat:'Tepung & Topping',g:0.3,na:2,lj:0.0},
+  {id:'T02',name:'Boba / pearl tapioka (matang)',alt:'cooked boba pearls bubble tea pearl',cat:'Tepung & Topping',g:15.0,na:10,lj:0.0},
+  {id:'T03',name:'Oat / havermout',alt:'oatmeal rolled oats havermout quaker',cat:'Tepung & Topping',g:0.9,na:2,lj:1.4},
+  {id:'T04',name:'Cincau hitam (matang)',alt:'grass jelly cincau hitam gel',cat:'Tepung & Topping',g:1.0,na:5,lj:0.0},
+  {id:'T05',name:'Cincau hijau (matang)',alt:'green grass jelly cincau hijau',cat:'Tepung & Topping',g:0.0,na:3,lj:0.0},
+  {id:'T06',name:'Agar-agar (matang)',alt:'agar jelly agar-agar gel',cat:'Tepung & Topping',g:0.0,na:3,lj:0.0},
+  {id:'T07',name:'Nata de coco',alt:'nata de coco coconut gel jelly',cat:'Tepung & Topping',g:12.0,na:5,lj:0.0},
+];
+
+// ============================================================
+// APP STATE
+// ============================================================
+let currentMode = 'manual';
+let state = {step:0, pemanis:null, gula:null, garam:null, lemak:null, result:null};
+let rState = {name:'', volume:350, pemanis:null, ingredients:[], subStep:0};
+let selIng = null, searchTimer = null;
+
+const LV_COLORS = {A:'#1a7a4a',B:'#5aab2e',C:'#f5a623',D:'#d0212a'};
+const LV_BG     = {A:'#dcfce7',B:'#d1fae5',C:'#fef9c3',D:'#fee2e2'};
+const COLORS    = {A:{bg:'#1a7a4a'},B:{bg:'#5aab2e'},C:{bg:'#f5a623'},D:{bg:'#d0212a'}};
+const DESCS     = {
+  A:'Kandungan gula, garam, dan lemak jenuh sangat rendah. Pilihan terbaik untuk kesehatan.',
+  B:'Kandungan gula, garam, dan lemak jenuh rendah. Pilihan yang baik untuk dikonsumsi.',
+  C:'Kandungan gula, garam, atau lemak cukup tinggi. Konsumsi dengan bijak.',
+  D:'Kandungan gula, garam, atau lemak tinggi. Batasi konsumsi untuk menjaga kesehatan.'
+};
+
+// ============================================================
+// MODE SWITCHING
+// ============================================================
+function switchMode(m) {
+  currentMode = m;
+  document.getElementById('tab-manual').classList.toggle('active', m==='manual');
+  document.getElementById('tab-recipe').classList.toggle('active', m==='recipe');
+  document.getElementById('recipe-section').style.display = m==='recipe' ? 'block' : 'none';
+  document.getElementById('manual-section').style.display = m==='manual' ? 'block' : 'none';
+  if (m === 'manual') {
+    document.getElementById('mainTitle').innerHTML = 'Tentukan Nutri-Level<br>minuman Anda';
+    document.getElementById('mainDesc').textContent = 'Isi kandungan gizi per 100 ml untuk menentukan klasifikasi A\u2013D dan mengunduh label resmi sesuai KMK No. HK.01.07/MENKES/301/2026.';
+  } else {
+    document.getElementById('mainTitle').innerHTML = 'Analisa Resep & Tentukan<br>Nutri-Level Otomatis';
+    document.getElementById('mainDesc').textContent = 'Masukkan semua bahan resep dari database TKPI 2017. Kandungan gula, garam, dan lemak jenuh per 100 ml akan dihitung otomatis \u2014 tidak perlu input manual.';
+  }
+}
+
+// ============================================================
+// MANUAL MODE
+// ============================================================
+document.querySelectorAll('input[name="pemanis"]').forEach(r => {
+  r.addEventListener('change', e => {
+    state.pemanis = e.target.value;
+    document.querySelectorAll('#manual-section .radio-opt').forEach(o => o.classList.remove('selected'));
+    e.target.closest('.radio-opt').classList.add('selected');
+    document.getElementById('btn-next0').disabled = false;
+  });
+});
+
+function goTo(step) {
+  if (step === 2) {
+    const gv=document.getElementById('inp-gula').value, gav=document.getElementById('inp-garam').value;
+    if (gv===''||gav===''){alert('Mohon isi kandungan gula dan garam terlebih dahulu.');return;}
+    state.gula=parseFloat(gv); state.garam=parseFloat(gav);
+  }
+  if (step>1&&(state.gula===null||state.garam===null)){goTo(1);return;}
+  state.step=step;
+  document.querySelectorAll('#manual-section .step-panel').forEach((p,i)=>p.classList.toggle('active',i===step));
+  updateManualNav(step);
+}
+
+function updateManualNav(step) {
+  for(let i=0;i<4;i++){
+    const p=document.getElementById('pill'+i); if(!p) continue;
+    p.className='step-pill';
+    if(i<step) p.classList.add('done'); else if(i===step) p.classList.add('active');
+  }
+  ['line01','line12','line23'].forEach((id,i)=>{
+    const el=document.getElementById(id); if(!el) return;
+    el.className='step-line'; if(step>i) el.classList.add('done');
+  });
+}
+
+function classify(gula, garam, lemak, pemanis) {
+  function lvG(v,p){if(v<=1)return p==='no'?'A':'B';if(v<=5)return 'B';if(v<=10)return 'C';return 'D';}
+  function lvNa(v){if(v<=5)return 'A';if(v<=120)return 'B';if(v<=500)return 'C';return 'D';}
+  function lvLj(v){if(v<=0.7)return 'A';if(v<=1.2)return 'B';if(v<=2.8)return 'C';return 'D';}
+  const order=['A','B','C','D'];
+  const lg=lvG(gula,pemanis), lna=lvNa(garam), ll=lvLj(lemak);
+  const final=[lg,lna,ll].reduce((m,l)=>order.indexOf(l)>order.indexOf(m)?l:m,'A');
+  return {gula:lg,garam:lna,lemak:ll,final};
+}
+
+function calculate() {
+  const lv=document.getElementById('inp-lemak').value;
+  if(lv===''){alert('Mohon isi kandungan lemak jenuh.');return;}
+  state.lemak=parseFloat(lv);
+  const r=classify(state.gula,state.garam,state.lemak,state.pemanis);
+  state.result=r;
+  renderBreakdown('breakdown-rows','result-info',r,state.gula,state.garam,state.lemak);
+  goTo(3); renderPreview(r);
+}
+
+function renderBreakdown(rowsId, infoId, r, gula, garam, lemak) {
+  const bc=LV_COLORS;
+  const rows=[
+    {label:'Gula',val:gula.toFixed(1)+' g/100ml',lv:r.gula},
+    {label:'Garam (Natrium)',val:garam.toFixed(0)+' mg/100ml',lv:r.garam},
+    {label:'Lemak jenuh',val:lemak.toFixed(1)+' g/100ml',lv:r.lemak},
+  ];
+  let html=rows.map(row=>`
+    <div class="breakdown-row">
+      <span class="br-label">${row.label}</span>
+      <span class="br-val">${row.val}</span>
+      <div class="br-badge" style="background:${bc[row.lv]}">${row.lv}</div>
+    </div>`).join('');
+  html+=`<div class="breakdown-row" style="background:#f8fdf9;border-radius:8px;margin-top:8px;padding:10px 12px;border:none">
+    <span class="br-label" style="font-weight:700;color:var(--text-primary)">Nutri-Level Akhir</span>
+    <span class="br-val" style="font-size:18px;color:${bc[r.final]};font-family:Arial Black">${r.final}</span>
+    <div class="br-badge" style="background:${bc[r.final]};width:30px;height:30px;font-size:14px">${r.final}</div>
+  </div>`;
+  document.getElementById(rowsId).innerHTML=html;
+  document.getElementById(infoId).innerHTML=DESCS[r.final];
+}
+
+// ============================================================
+// RECIPE MODE — PEMANIS RADIO
+// ============================================================
+document.querySelectorAll('input[name="r-pemanis"]').forEach(r => {
+  r.addEventListener('change', e => {
+    rState.pemanis=e.target.value;
+    document.querySelectorAll('#recipe-section .radio-opt').forEach(o=>o.classList.remove('selected'));
+    e.target.closest('.radio-opt').classList.add('selected');
+    document.getElementById('r-btn-next0').disabled=false;
+  });
+});
+
+// ============================================================
+// RECIPE NAVIGATION
+// ============================================================
+function goToRecipeStep(step) {
+  if (step===1) {
+    const vol=parseFloat(document.getElementById('r-volume').value);
+    if(!vol||vol<=0){alert('Masukkan volume sajian yang valid.');return;}
+    if(!rState.pemanis){alert('Pilih jenis pemanis terlebih dahulu.');return;}
+    rState.volume=vol;
+    rState.name=document.getElementById('r-name').value.trim()||'Minuman';
+  }
+  rState.subStep=step;
+  document.querySelectorAll('#recipe-section .step-panel').forEach((p,i)=>p.classList.toggle('active',i===step));
+  updateRecipeNav(step);
+}
+
+function updateRecipeNav(step) {
+  ['rpill0','rpill1','rpill2'].forEach((id,i)=>{
+    const p=document.getElementById(id); if(!p) return;
+    p.className='step-pill';
+    if(i<step) p.classList.add('done'); else if(i===step) p.classList.add('active');
+  });
+  ['rline01','rline12'].forEach((id,i)=>{
+    const el=document.getElementById(id); if(!el) return;
+    el.className='step-line'; if(step>i) el.classList.add('done');
+  });
+}
+
+function backToIngredients(){goToRecipeStep(1);}
+
+// ============================================================
+// TKPI SEARCH
+// ============================================================
+function searchTKPI(q) {
+  clearTimeout(searchTimer);
+  const dd=document.getElementById('r-search-dd');
+  if(!q||q.length<1){dd.classList.remove('open');return;}
+  searchTimer=setTimeout(()=>{
+    const ql=q.toLowerCase();
+    const res=TKPI.filter(i=>
+      i.name.toLowerCase().includes(ql)||
+      i.alt.toLowerCase().includes(ql)||
+      i.cat.toLowerCase().includes(ql)
+    ).slice(0,9);
+    if(res.length===0){
+      dd.innerHTML=`<div class="dd-empty">Tidak ditemukan. Coba kata kunci lain (mis. "susu", "kopi", "gula").</div>`;
+    } else {
+      dd.innerHTML=res.map(item=>`
+        <div class="dd-item" onclick="selectTKPI('${item.id}')">
+          <div class="dd-name">${item.name}</div>
+          <div class="dd-cat">${item.cat}</div>
+          <div class="dd-nutr">Gula: ${item.g}g &middot; Na: ${item.na}mg &middot; Lemak jenuh: ${item.lj}g &nbsp;(per 100 g bahan)</div>
+        </div>`).join('');
+    }
+    dd.classList.add('open');
+  },180);
+}
+
+function searchKeydown(e){
+  const dd=document.getElementById('r-search-dd');
+  if(e.key==='Escape'){dd.classList.remove('open');return;}
+  if(e.key==='Enter'){const first=dd.querySelector('.dd-item');if(first)first.click();}
+}
+
+function selectTKPI(id){
+  selIng=TKPI.find(i=>i.id===id);
+  document.getElementById('r-search').value=selIng.name;
+  document.getElementById('r-search-dd').classList.remove('open');
+  const chip=document.getElementById('r-sel-chip');
+  chip.classList.add('show');
+  document.getElementById('chip-name').textContent=selIng.name;
+  document.getElementById('chip-nutr').textContent=
+    `Gula: ${selIng.g}g \u00b7 Na: ${selIng.na}mg \u00b7 LJ: ${selIng.lj}g /100g`;
+  document.getElementById('r-qty').focus();
+}
+
+function clearSelIng(){
+  selIng=null;
+  document.getElementById('r-search').value='';
+  document.getElementById('r-sel-chip').classList.remove('show');
+  document.getElementById('r-search-dd').classList.remove('open');
+}
+
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.search-container')){
+    const dd=document.getElementById('r-search-dd');
+    if(dd) dd.classList.remove('open');
+  }
+});
+
+// ============================================================
+// INGREDIENT MANAGEMENT
+// ============================================================
+function addIngredient(){
+  if(!selIng){alert('Pilih bahan dari daftar pencarian terlebih dahulu.');return;}
+  const qty=parseFloat(document.getElementById('r-qty').value);
+  if(!qty||qty<=0){alert('Masukkan jumlah bahan yang valid.');return;}
+  const unit=document.getElementById('r-unit').value;
+  const grams=unit==='g'?qty:unit==='ml'?qty:unit==='sdm'?qty*15:qty*5;
+  rState.ingredients.push({
+    id:Date.now(), name:selIng.name, cat:selIng.cat, qty, unit, grams,
+    sg:+((selIng.g/100)*grams).toFixed(3),
+    sna:+((selIng.na/100)*grams).toFixed(2),
+    slj:+((selIng.lj/100)*grams).toFixed(3)
+  });
+  clearSelIng();
+  document.getElementById('r-qty').value='';
+  renderIngList(); updateSSF();
+}
+
+function removeIng(id){
+  rState.ingredients=rState.ingredients.filter(i=>i.id!==id);
+  renderIngList(); updateSSF();
+}
+
+function renderIngList(){
+  const c=document.getElementById('r-ing-list');
+  const btn=document.getElementById('r-btn-calc');
+  if(rState.ingredients.length===0){
+    c.innerHTML=`<div class="ing-empty">&#x1F964; Belum ada bahan ditambahkan.<br>Cari bahan di atas dan klik Tambah.</div>`;
+    btn.disabled=true; return;
+  }
+  btn.disabled=false;
+  const UL={g:'g',ml:'ml',sdm:'sdm',sdt:'sdt'};
+  const tot={sg:rState.ingredients.reduce((s,i)=>s+i.sg,0),sna:rState.ingredients.reduce((s,i)=>s+i.sna,0),slj:rState.ingredients.reduce((s,i)=>s+i.slj,0)};
+  c.innerHTML=`
+    <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">
+      Daftar Bahan (${rState.ingredients.length} item)
+    </div>
+    <div class="ing-list">
+      ${rState.ingredients.map(ing=>`
+        <div class="ing-item">
+          <div class="ing-info">
+            <div class="ing-name">${ing.name}</div>
+            <div class="ing-qty">${ing.qty} ${UL[ing.unit]} &asymp; ${ing.grams.toFixed(1)} g</div>
+          </div>
+          <div class="ing-badges">
+            <span class="ib ib-g">G:${ing.sg.toFixed(1)}g</span>
+            <span class="ib ib-na">Na:${ing.sna.toFixed(0)}mg</span>
+            <span class="ib ib-lj">LJ:${ing.slj.toFixed(1)}g</span>
+          </div>
+          <button class="btn-rm" onclick="removeIng(${ing.id})" title="Hapus">&times;</button>
+        </div>`).join('')}
+    </div>
+    <div style="margin-top:8px;padding:8px 12px;background:#f0f7f3;border-radius:8px;font-size:12px;color:var(--text-secondary)">
+      <strong>Total kontribusi:</strong> Gula ${tot.sg.toFixed(1)} g &middot; Na ${tot.sna.toFixed(0)} mg &middot; Lemak jenuh ${tot.slj.toFixed(1)} g
+    </div>`;
+}
+
+// ============================================================
+// LIVE SSF SUMMARY
+// ============================================================
+function getSSF(){
+  const vol=rState.volume||350;
+  const sg=rState.ingredients.reduce((s,i)=>s+i.sg,0);
+  const sna=rState.ingredients.reduce((s,i)=>s+i.sna,0);
+  const slj=rState.ingredients.reduce((s,i)=>s+i.slj,0);
+  return {sugar:(sg/vol)*100, sodium:(sna/vol)*100, satFat:(slj/vol)*100};
+}
+
+function updateSSF(){
+  const card=document.getElementById('r-ssf-card');
+  if(rState.ingredients.length===0){card.style.display='none';return;}
+  card.style.display='block';
+  const t=getSSF();
+  const r=classify(t.sugar,t.sodium,t.satFat,rState.pemanis||'no');
+  const vol=parseFloat(document.getElementById('r-volume').value)||rState.volume;
+  document.getElementById('r-ssf-note').textContent=
+    `Volume sajian: ${vol} ml \u00b7 ${rState.ingredients.length} bahan \u00b7 kandungan per 100 ml:`;
+  const lb=document.getElementById('live-badge');
+  lb.textContent=`Level ${r.final}`;
+  lb.style.background=LV_BG[r.final]; lb.style.color=LV_COLORS[r.final];
+  const items=[
+    {lbl:'Gula',val:t.sugar.toFixed(1),unit:'g/100ml',lv:r.gula},
+    {lbl:'Natrium',val:t.sodium.toFixed(0),unit:'mg/100ml',lv:r.garam},
+    {lbl:'Lemak Jenuh',val:t.satFat.toFixed(1),unit:'g/100ml',lv:r.lemak},
+  ];
+  document.getElementById('r-ssf-grid').innerHTML=items.map(it=>`
+    <div class="ssf-item" style="background:${LV_BG[it.lv]};border-color:${LV_COLORS[it.lv]}44">
+      <div class="ssf-lbl">${it.lbl}</div>
+      <div class="ssf-val" style="color:${LV_COLORS[it.lv]}">${it.val}</div>
+      <div class="ssf-unit">${it.unit}</div>
+      <span class="ssf-lv" style="background:${LV_COLORS[it.lv]}22;color:${LV_COLORS[it.lv]}">Level ${it.lv}</span>
+    </div>`).join('');
+}
+
+document.getElementById('r-volume').addEventListener('input',()=>{
+  const v=parseFloat(document.getElementById('r-volume').value);
+  if(v>0){rState.volume=v;updateSSF();}
+});
+
+// ============================================================
+// CALCULATE FROM RECIPE
+// ============================================================
+function calcFromRecipe(){
+  if(rState.ingredients.length===0){alert('Tambahkan minimal 1 bahan terlebih dahulu.');return;}
+  const vol=parseFloat(document.getElementById('r-volume').value);
+  if(vol>0) rState.volume=vol;
+  rState.name=document.getElementById('r-name').value.trim()||'Minuman';
+  const t=getSSF();
+  state.pemanis=rState.pemanis;
+  state.gula=+t.sugar.toFixed(2);
+  state.garam=+t.sodium.toFixed(1);
+  state.lemak=+t.satFat.toFixed(2);
+  // Sync manual inputs (needed for label download)
+  document.getElementById('inp-gula').value=state.gula;
+  document.getElementById('inp-garam').value=state.garam;
+  document.getElementById('inp-lemak').value=state.lemak;
+  const r=classify(state.gula,state.garam,state.lemak,state.pemanis);
+  state.result=r;
+  document.getElementById('r-src-badge').innerHTML=
+    `<div class="r-badge">&#129514; Analisa Resep &nbsp;&middot;&nbsp; ${rState.name} &nbsp;&middot;&nbsp; ${rState.volume} ml/saji &nbsp;&middot;&nbsp; ${rState.ingredients.length} bahan</div>`;
+  renderBreakdown('r-breakdown','r-result-info',r,state.gula,state.garam,state.lemak);
+  goToRecipeStep(2);
+  renderPreview(r);
+}
+
+// ============================================================
+// RESET
+// ============================================================
+function resetAll(){
+  state={step:0,pemanis:null,gula:null,garam:null,lemak:null,result:null};
+  rState={name:'',volume:350,pemanis:null,ingredients:[],subStep:0};
+  selIng=null;
+  document.querySelectorAll('input[name="pemanis"]').forEach(r=>r.checked=false);
+  document.querySelectorAll('#manual-section .radio-opt').forEach(o=>o.classList.remove('selected'));
+  document.getElementById('btn-next0').disabled=true;
+  ['inp-gula','inp-garam','inp-lemak'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  document.querySelectorAll('input[name="r-pemanis"]').forEach(r=>r.checked=false);
+  document.querySelectorAll('#recipe-section .radio-opt').forEach(o=>o.classList.remove('selected'));
+  document.getElementById('r-btn-next0').disabled=true;
+  document.getElementById('r-name').value='';
+  document.getElementById('r-volume').value='350';
+  document.getElementById('r-search').value='';
+  document.getElementById('r-sel-chip').classList.remove('show');
+  document.getElementById('r-search-dd').classList.remove('open');
+  document.getElementById('r-qty').value='';
+  document.getElementById('r-ing-list').innerHTML=`<div class="ing-empty">&#x1F964; Belum ada bahan ditambahkan.<br>Cari bahan di atas dan klik Tambah.</div>`;
+  document.getElementById('r-ssf-card').style.display='none';
+  document.getElementById('r-btn-calc').disabled=true;
+  document.getElementById('preview-content').innerHTML=
+    `<div class="preview-placeholder"><span class="ph-icon">&#127991;</span>Isi form di sebelah kiri untuk melihat preview label Nutri-Level sesuai regulasi.</div>`;
+  document.getElementById('download-card').style.display='none';
+  if(currentMode==='manual'){
+    document.querySelectorAll('#manual-section .step-panel').forEach((p,i)=>p.classList.toggle('active',i===0));
+    updateManualNav(0);
+  } else {
+    document.querySelectorAll('#recipe-section .step-panel').forEach((p,i)=>p.classList.toggle('active',i===0));
+    updateRecipeNav(0);
+  }
+}
+
+// ============================================================
+// LABEL SVG GENERATOR
+// ============================================================
+function makeLabelSVG(level,pct,nutriName,type){
+  const C={A:'#1a7a4a',B:'#5aab2e',C:'#f5a623',D:'#d0212a'};
+  const letters=['A','B','C','D'];
+  if(type==='horizontal'){
+    const W=340,H=110,barH=56,barY=44,startX=12;
+    const totalBarW=W-startX-90, segW=totalBarW/4;
+    let segs='',circles='';
+    for(let i=0;i<4;i++){
+      const l=letters[i],x=startX+i*segW,isActive=l===level;
+      const isFirst=i===0,isLast=i===3,rx1=isFirst?28:0,rx2=isLast?28:0;
+      segs+=`<path d="M${x+rx1},${barY} h${segW-rx1-rx2} q${rx2},0 ${rx2},${rx2} v${barH-rx1-rx2} q0,${rx2} -${rx2},${rx2} h-${segW-rx1-rx2} q-${rx1},0 -${rx1},-${rx1} v-${barH-rx1-rx2} q0,-${rx1} ${rx1},-${rx1} z" fill="${C[l]}" opacity="${isActive?1:0.38}"/>`;
+      const cx=startX+(i+0.5)*segW,cy=barY+barH/2;
+      if(isActive){
+        circles+=`<circle cx="${cx}" cy="${cy}" r="26" fill="${C[l]}" stroke="white" stroke-width="3"/>`;
+        circles+=`<text x="${cx}" y="${cy+14}" text-anchor="middle" font-family="Arial Black" font-size="36" font-weight="900" fill="white">${l}</text>`;
+      } else {
+        circles+=`<text x="${cx}" y="${cy+9}" text-anchor="middle" font-family="Arial Black" font-size="22" font-weight="900" fill="white" opacity="0.9">${l}</text>`;
+      }
+    }
+    const boxX=startX+totalBarW+4,boxW=W-boxX-12;
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+      <rect x="0" y="0" width="${W}" height="${H}" rx="20" fill="white" stroke="#dde0d8" stroke-width="1.5"/>
+      <text x="${W/2-30}" y="32" text-anchor="middle" font-family="Arial Black" font-size="18" font-weight="900" fill="#1a1c18" letter-spacing="1">NUTRI-LEVEL</text>
+      ${segs}${circles}
+      <rect x="${boxX}" y="${barY}" width="${boxW}" height="${barH}" rx="10" fill="white" stroke="#dde0d8" stroke-width="1"/>
+      <text x="${boxX+boxW/2}" y="${barY+barH/2-5}" text-anchor="middle" font-family="Arial Black" font-size="15" font-weight="900" fill="#1a1c18">${pct}%</text>
+      <text x="${boxX+boxW/2}" y="${barY+barH/2+9}" text-anchor="middle" font-family="Arial" font-size="8.5" fill="#5a5f52">${nutriName}</text>
+    </svg>`;
+  }
+  const VW=100,VH=260,segH=VH*0.62/4,barW=54,barX=(VW-barW)/2,bsY=VH*0.12;
+  let vsegs='';
+  for(let i=0;i<4;i++){
+    const l=letters[i],y=bsY+i*segH,isActive=l===level;
+    vsegs+=`<rect x="${barX}" y="${y}" width="${barW}" height="${segH}" rx="${i===0||i===3?12:0}" fill="${C[l]}" opacity="${isActive?1:0.38}"/>`;
+    if(isActive) vsegs+=`<circle cx="${barX+barW/2}" cy="${y+segH/2}" r="22" fill="${C[l]}" stroke="white" stroke-width="2.5"/>`;
+    vsegs+=`<text x="${barX+barW/2}" y="${y+segH/2+(isActive?8:5)}" text-anchor="middle" font-family="Arial Black" font-size="${isActive?24:16}" font-weight="900" fill="white" opacity="${isActive?1:0.9}">${l}</text>`;
+  }
+  const pctY=bsY+4*segH+20;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${VW}" height="${VH}" viewBox="0 0 ${VW} ${VH}">
+    <rect x="0" y="0" width="${VW}" height="${VH}" rx="14" fill="white" stroke="#dde0d8" stroke-width="1.5"/>
+    <text x="${VW/2}" y="12" text-anchor="middle" font-family="Arial Black" font-size="7.5" font-weight="900" fill="#1a1c18" letter-spacing="0.5">NUTRI</text>
+    <text x="${VW/2}" y="22" text-anchor="middle" font-family="Arial Black" font-size="7.5" font-weight="900" fill="#1a1c18" letter-spacing="0.5">LEVEL</text>
+    ${vsegs}
+    <text x="${VW/2}" y="${pctY}" text-anchor="middle" font-family="Arial Black" font-size="12" font-weight="900" fill="#1a1c18">${pct}%</text>
+    <text x="${VW/2}" y="${pctY+12}" text-anchor="middle" font-family="Arial" font-size="7" fill="#5a5f52">${nutriName}</text>
+  </svg>`;
+}
+
+function getTopNutri(r){
+  const order=['A','B','C','D'];
+  const items=[
+    {name:'gula', lv:r.gula, pct:state.gula.toFixed(1)},
+    {name:'garam',lv:r.garam,pct:(state.garam/10).toFixed(1)},
+    {name:'lemak',lv:r.lemak,pct:state.lemak.toFixed(1)}
+  ];
+  const top=items.reduce((m,i)=>order.indexOf(i.lv)>=order.indexOf(m.lv)?i:m,items[0]);
+  return {name:top.name,pct:top.pct};
+}
+
+function renderPreview(r){
+  const {name,pct}=getTopNutri(r);
+  const svgH=makeLabelSVG(r.final,pct,name,'horizontal');
+  const svgV=makeLabelSVG(r.final,pct,name,'vertical');
+  document.getElementById('preview-content').innerHTML=`
+    <div style="text-align:center;margin-bottom:1.25rem">
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Horizontal</div>
+      <div style="display:flex;justify-content:center">${svgH}</div>
+    </div>
+    <div style="display:flex;gap:1.5rem;justify-content:center;align-items:flex-start">
+      <div style="text-align:center">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Vertikal</div>
+        ${svgV}
+      </div>
+      <div style="text-align:center;flex:1">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Nutri-Level</div>
+        <div style="font-size:72px;font-family:Arial Black;font-weight:900;color:${COLORS[r.final].bg};line-height:1">${r.final}</div>
+        <div style="font-size:12px;color:var(--text-secondary);margin-top:6px;line-height:1.5">${DESCS[r.final]}</div>
+      </div>
+    </div>`;
+  document.getElementById('download-card').style.display='block';
+}
+
+async function downloadLabel(type){
+  if(!state.result) return;
+  const {name,pct}=getTopNutri(state.result);
+  const svg=makeLabelSVG(state.result.final,pct,name,type);
+  const wrapper=document.getElementById('label-canvas-wrapper');
+  wrapper.innerHTML=svg;
+  try {
+    const canvas=await html2canvas(wrapper,{scale:3,backgroundColor:'#ffffff',useCORS:true,logging:false});
+    const link=document.createElement('a');
+    link.download=`nutri-level-${state.result.final}-${type}.png`;
+    link.href=canvas.toDataURL('image/png'); link.click();
+  } catch(e){
+    const blob=new Blob([svg],{type:'image/svg+xml'});
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement('a');
+    link.download=`nutri-level-${state.result.final}-${type}.svg`;
+    link.href=url; link.click(); URL.revokeObjectURL(url);
+  }
+  wrapper.innerHTML='';
+}
+</script>
+</body>
+</html>

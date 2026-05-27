@@ -266,7 +266,7 @@
         <div class="ssf-note" id="r-ssf-note"></div>
         <div class="ssf-grid" id="r-ssf-grid"></div>
         <div style="font-size:11px;color:#0d5c36;background:#eaf7f0;border:1px solid #b8dfc9;border-radius:8px;padding:8px 12px;line-height:1.5">
-          &#9888;&#65039; Estimasi berbasis TKPI 2017. Wajib diverifikasi dengan uji laboratorium terakreditasi sebelum pencantuman label resmi.
+          &#9888;&#65039; <strong>Estimasi TKPI 2017:</strong> Natrium dari kolom NATRIUM TKPI (langsung). Gula dihitung dari KH (karohidrat total); produk susu plain dikurangi laktosa. Lemak jenuh diestimasi dari total LEMAK TKPI &times; faktor saturasi per kategori pangan. TKPI 2017 tidak menyediakan kolom "Gula" &amp; "Lemak Jenuh" secara langsung. Wajib verifikasi dengan uji laboratorium terakreditasi untuk pencantuman label resmi (KMK HK.01.07/MENKES/301/2026).
         </div>
       </div>
 
@@ -417,7 +417,7 @@
 </div>
 </main>
 <div id="label-canvas-wrapper"></div>
-<footer>Berdasarkan KMK RI No. HK.01.07/MENKES/301/2026 &middot; Ditetapkan 14 April 2026 &middot; Data gizi bahan: Tabel Komposisi Pangan Indonesia (TKPI) 2017</footer>
+<footer>Berdasarkan KMK RI No. HK.01.07/MENKES/301/2026 &middot; Ditetapkan 14 April 2026 &middot; Data gizi: TKPI 2017 (Na langsung dari kolom Natrium; Gula estimasi dari KH; Lemak Jenuh estimasi dari total Lemak). Wajib verifikasi lab.</footer>
 
 <script>
 // ============================================================
@@ -425,81 +425,76 @@
 // g = gula (mono+disakarida, minus laktosa), na = natrium (mg), lj = lemak jenuh (g)
 // ============================================================
 const TKPI = [
-  // Gula & Pemanis
-  {id:'G01',name:'Gula pasir',alt:'gula putih tebu white sugar refined sugar',cat:'Gula & Pemanis',g:99.9,na:1,lj:0.0},
-  {id:'G02',name:'Gula merah / gula jawa',alt:'gula jawa palm sugar coklat brown sugar',cat:'Gula & Pemanis',g:76.1,na:30,lj:0.0},
-  {id:'G03',name:'Gula aren',alt:'aren sugar nira gula kelapa coconut palm sugar',cat:'Gula & Pemanis',g:72.0,na:28,lj:0.0},
-  {id:'G04',name:'Gula kelapa',alt:'coconut sugar gula palem',cat:'Gula & Pemanis',g:70.0,na:45,lj:0.0},
-  {id:'G05',name:'Madu',alt:'honey madu lebah',cat:'Gula & Pemanis',g:82.1,na:5,lj:0.0},
-  {id:'G06',name:'Sirup gula (simple syrup)',alt:'simple syrup sugar syrup air gula larutan',cat:'Gula & Pemanis',g:67.5,na:2,lj:0.0},
-  {id:'G07',name:'Sirup cokelat',alt:'chocolate syrup sirup coklat',cat:'Gula & Pemanis',g:56.0,na:85,lj:0.5},
-  {id:'G08',name:'Sirup karamel',alt:'caramel sauce karamel saus',cat:'Gula & Pemanis',g:59.0,na:115,lj:2.8},
-  {id:'G09',name:'Sirup vanila',alt:'vanilla syrup sirup vanilla',cat:'Gula & Pemanis',g:62.0,na:5,lj:0.0},
-  {id:'G10',name:'Sirup hazelnut',alt:'hazelnut syrup sirup hazelnut',cat:'Gula & Pemanis',g:62.0,na:5,lj:0.0},
-  {id:'G11',name:'Sirup matcha',alt:'matcha syrup sirup matcha',cat:'Gula & Pemanis',g:60.0,na:5,lj:0.0},
-  // Susu & Produk Susu
-  {id:'S01',name:'Susu sapi segar',alt:'fresh milk whole milk susu segar full cream',cat:'Susu & Produk Susu',g:4.8,na:50,lj:2.0},
-  {id:'S02',name:'Susu skim cair',alt:'skim milk low fat milk susu rendah lemak nonfat',cat:'Susu & Produk Susu',g:5.0,na:52,lj:0.1},
-  {id:'S03',name:'Susu UHT full cream',alt:'UHT whole milk susu uht',cat:'Susu & Produk Susu',g:4.5,na:44,lj:2.1},
-  {id:'S04',name:'Susu kental manis',alt:'condensed milk sweetened condensed milk SKM',cat:'Susu & Produk Susu',g:55.0,na:130,lj:3.5},
-  {id:'S05',name:'Susu bubuk full cream',alt:'full cream milk powder susu bubuk',cat:'Susu & Produk Susu',g:37.0,na:400,lj:20.0},
-  {id:'S06',name:'Susu bubuk skim',alt:'skim milk powder non-fat dry milk susu bubuk skim',cat:'Susu & Produk Susu',g:51.0,na:550,lj:0.3},
-  {id:'S07',name:'Susu evaporasi',alt:'evaporated milk susu evap carnation frisian',cat:'Susu & Produk Susu',g:9.5,na:100,lj:3.0},
-  {id:'S08',name:'Creamer nabati bubuk',alt:'non-dairy creamer powder krimer nabati whitener',cat:'Susu & Produk Susu',g:55.0,na:195,lj:22.0},
-  {id:'S09',name:'Susu almond',alt:'almond milk plant based milk',cat:'Susu & Produk Susu',g:1.5,na:72,lj:0.3},
-  {id:'S10',name:'Susu kedelai',alt:'soy milk plant milk',cat:'Susu & Produk Susu',g:1.7,na:51,lj:0.3},
-  {id:'S11',name:'Susu oat',alt:'oat milk plant milk oats',cat:'Susu & Produk Susu',g:3.5,na:60,lj:0.5},
-  {id:'S12',name:'Whipping cream / krim kocok',alt:'heavy cream whipped cream krim kocok double cream',cat:'Susu & Produk Susu',g:3.4,na:38,lj:23.0},
-  {id:'S13',name:'Yogurt plain',alt:'plain yogurt yoghurt greek yogurt',cat:'Susu & Produk Susu',g:4.7,na:60,lj:1.0},
-  {id:'S14',name:'Es krim vanilla',alt:'vanilla ice cream',cat:'Susu & Produk Susu',g:22.0,na:80,lj:7.0},
-  {id:'S15',name:'Keju krim (cream cheese)',alt:'cream cheese krim keju philadelphia',cat:'Susu & Produk Susu',g:2.7,na:321,lj:20.0},
-  {id:'S16',name:'Susu kambing',alt:'goat milk susu kambing',cat:'Susu & Produk Susu',g:4.5,na:50,lj:2.7},
-  // Minuman Dasar
-  {id:'M01',name:'Kopi bubuk (ground coffee)',alt:'kopi bubuk roasted coffee arabica robusta',cat:'Minuman Dasar',g:0.0,na:5,lj:0.0},
-  {id:'M02',name:'Kopi instan',alt:'instant coffee nescafe kopi instan',cat:'Minuman Dasar',g:0.0,na:72,lj:0.0},
-  {id:'M03',name:'Teh hitam kering',alt:'black tea teh kering daun teh',cat:'Minuman Dasar',g:0.0,na:3,lj:0.0},
-  {id:'M04',name:'Teh hijau kering',alt:'green tea teh hijau daun',cat:'Minuman Dasar',g:0.0,na:3,lj:0.0},
-  {id:'M05',name:'Matcha bubuk',alt:'matcha powder teh hijau bubuk green tea powder',cat:'Minuman Dasar',g:0.0,na:7,lj:0.5},
-  {id:'M06',name:'Cokelat bubuk / kakao murni',alt:'cocoa powder chocolate powder cacao coklat kakao',cat:'Minuman Dasar',g:1.8,na:21,lj:4.5},
-  {id:'M07',name:'Dark chocolate (blok/batang)',alt:'dark chocolate coklat hitam dark choc',cat:'Minuman Dasar',g:48.0,na:20,lj:17.0},
-  {id:'M08',name:'Taro bubuk',alt:'taro powder talas bubuk purple yam',cat:'Minuman Dasar',g:55.0,na:40,lj:1.0},
-  {id:'M09',name:'Bubuk minuman cokelat sachet',alt:'chocolate drink powder milo ovaltine nesquik',cat:'Minuman Dasar',g:70.0,na:148,lj:1.5},
-  {id:'M10',name:'Air putih / mineral',alt:'water air putih mineral water',cat:'Minuman Dasar',g:0.0,na:0,lj:0.0},
-  {id:'M11',name:'Es batu',alt:'ice cubes air es batu',cat:'Minuman Dasar',g:0.0,na:0,lj:0.0},
-  {id:'M12',name:'Espresso cair (30 ml shot)',alt:'espresso coffee shot kopi espresso cair',cat:'Minuman Dasar',g:0.0,na:5,lj:0.1},
-  // Lemak & Santan
-  {id:'L01',name:'Santan kental segar',alt:'coconut cream coconut milk thick santan kental',cat:'Lemak & Santan',g:1.5,na:14,lj:13.0},
-  {id:'L02',name:'Santan encer',alt:'thin coconut milk santan encer',cat:'Lemak & Santan',g:1.0,na:8,lj:6.0},
-  {id:'L03',name:'Santan kemasan / kalengan',alt:'canned coconut milk santan kaleng kara',cat:'Lemak & Santan',g:1.5,na:15,lj:13.0},
-  {id:'L04',name:'Minyak kelapa murni (VCO)',alt:'coconut oil virgin coconut oil VCO minyak kelapa',cat:'Lemak & Santan',g:0.0,na:0,lj:82.0},
-  // Buah
-  {id:'B01',name:'Pisang (daging segar)',alt:'banana pisang ambon cavendish',cat:'Buah',g:15.4,na:1,lj:0.1},
-  {id:'B02',name:'Mangga (daging segar)',alt:'mango mangga harum manis',cat:'Buah',g:14.0,na:1,lj:0.0},
-  {id:'B03',name:'Stroberi segar',alt:'strawberry stroberi segar',cat:'Buah',g:4.9,na:1,lj:0.0},
-  {id:'B04',name:'Alpukat (daging)',alt:'avocado alpukat',cat:'Buah',g:0.2,na:7,lj:3.1},
-  {id:'B05',name:'Jus jeruk / jeruk peras',alt:'orange orange juice jeruk segar peras',cat:'Buah',g:9.0,na:1,lj:0.0},
-  {id:'B06',name:'Lemon / jeruk nipis (peras)',alt:'lemon lime jeruk nipis lemon juice',cat:'Buah',g:2.5,na:1,lj:0.0},
-  {id:'B07',name:'Kurma (tanpa biji)',alt:'dates kurma medjool',cat:'Buah',g:63.4,na:1,lj:0.1},
-  {id:'B08',name:'Air kelapa muda',alt:'coconut water kelapa muda air degan',cat:'Buah',g:2.7,na:105,lj:0.0},
-  {id:'B09',name:'Nanas (daging segar)',alt:'pineapple nanas segar',cat:'Buah',g:9.9,na:1,lj:0.0},
-  {id:'B10',name:'Melon (daging)',alt:'melon cantaloupe honeydew',cat:'Buah',g:7.0,na:9,lj:0.0},
-  {id:'B11',name:'Semangka (daging)',alt:'watermelon semangka',cat:'Buah',g:6.2,na:1,lj:0.0},
-  {id:'B12',name:'Blueberry segar',alt:'blueberry beri biru',cat:'Buah',g:10.0,na:1,lj:0.0},
-  {id:'B13',name:'Kelapa parut / daging kelapa',alt:'shredded coconut kelapa parut daging',cat:'Buah',g:5.0,na:20,lj:25.0},
-  // Rempah & Perisa
-  {id:'R01',name:'Jahe segar',alt:'fresh ginger jahe segar',cat:'Rempah & Perisa',g:1.7,na:13,lj:0.0},
-  {id:'R02',name:'Kayu manis bubuk',alt:'cinnamon powder kayu manis bubuk',cat:'Rempah & Perisa',g:2.2,na:10,lj:0.2},
-  {id:'R03',name:'Vanilla ekstrak cair',alt:'vanilla extract perisa vanila',cat:'Rempah & Perisa',g:12.7,na:7,lj:0.0},
-  {id:'R04',name:'Garam dapur',alt:'table salt sodium chloride garam',cat:'Rempah & Perisa',g:0.0,na:38758,lj:0.0},
-  {id:'R05',name:'Kardamom bubuk',alt:'cardamom powder kapulaga',cat:'Rempah & Perisa',g:4.4,na:18,lj:0.7},
-  // Tepung, Pati & Topping
-  {id:'T01',name:'Tepung tapioka kering',alt:'tapioca starch cassava starch tepung kanji sagu',cat:'Tepung & Topping',g:0.3,na:2,lj:0.0},
-  {id:'T02',name:'Boba / pearl tapioka (matang)',alt:'cooked boba pearls bubble tea pearl',cat:'Tepung & Topping',g:15.0,na:10,lj:0.0},
-  {id:'T03',name:'Oat / havermout',alt:'oatmeal rolled oats havermout quaker',cat:'Tepung & Topping',g:0.9,na:2,lj:1.4},
-  {id:'T04',name:'Cincau hitam (matang)',alt:'grass jelly cincau hitam gel',cat:'Tepung & Topping',g:1.0,na:5,lj:0.0},
-  {id:'T05',name:'Cincau hijau (matang)',alt:'green grass jelly cincau hijau',cat:'Tepung & Topping',g:0.0,na:3,lj:0.0},
-  {id:'T06',name:'Agar-agar (matang)',alt:'agar jelly agar-agar gel',cat:'Tepung & Topping',g:0.0,na:3,lj:0.0},
-  {id:'T07',name:'Nata de coco',alt:'nata de coco coconut gel jelly',cat:'Tepung & Topping',g:12.0,na:5,lj:0.0},
+  // ─── SUMBER DATA ────────────────────────────────────────────────────────────
+  // Semua nilai berdasarkan Tabel Komposisi Pangan Indonesia (TKPI) 2017
+  // Kolom TKPI yang digunakan: AIR, ENERGI, PROTEIN, LEMAK(total), KH(total),
+  //   SERAT, ABU, KALSIUM, FOSFOR, BESI, NATRIUM, KALIUM, ...
+  //
+  // na  = NATRIUM (mg/100g) — diambil LANGSUNG dari kolom NATRIUM TKPI 2017
+  // g   = estimasi gula (g/100g):
+  //         • Produk gula murni (MP00x): g = KH (semua karohidrat = gula)
+  //         • Buah: g = max(0, KH − SERAT) — karohidrat tersedia, mayoritas gula sederhana
+  //         • Susu plain (laktosa dominan): g = 0 (laktosa dikecualikan regulasi)
+  //         • Susu kental manis: g ≈ 40 (estimasi sukrosa non-laktosa)
+  //         • Santan/kelapa: g = KH (bukan laktosa)
+  // lj  = estimasi lemak jenuh (g/100g): LEMAK(TKPI) × faktor saturasi per kategori
+  //         kelapa: 0.86 | susu: 0.65 | cocoa butter: 0.62 | nabati/buah: 0.15
+  //   ⚠ TKPI 2017 TIDAK menyediakan kolom "Gula" maupun "Lemak Jenuh" secara langsung.
+  //     Wajib verifikasi dengan uji laboratorium terakreditasi untuk pencantuman label resmi.
+  // ────────────────────────────────────────────────────────────────────────────
+
+  // 4.11 Gula, Sirup & Konfeksioneri
+  {id:"G01",name:"Gula pasir / gula putih",alt:"gula putih tebu white sugar pasir refined",cat:"Gula & Pemanis",tkpi:"MP007",g:94.0,na:1,lj:0.0,fat:0.0,kh:94.0},
+  {id:"G02",name:"Gula aren",alt:"aren sugar nira palm sugar coconut aren gula jawa merah brown palm",cat:"Gula & Pemanis",tkpi:"MP005",g:92.0,na:15,lj:0.0,fat:0.0,kh:92.0},
+  {id:"G03",name:"Gula kelapa",alt:"coconut sugar gula palem palm sugar kelapa jawa",cat:"Gula & Pemanis",tkpi:"MP006",g:76.0,na:2,lj:8.6,fat:10.0,kh:76.0},
+  {id:"G04",name:"Madu",alt:"honey madu lebah natural",cat:"Gula & Pemanis",tkpi:"MP010",g:79.5,na:6,lj:0.0,fat:0.0,kh:79.5},
+  {id:"G05",name:"Sirup (umum / plain syrup)",alt:"sirup gula simple syrup sugar syrup larutan cair",cat:"Gula & Pemanis",tkpi:"MP014",g:55.0,na:3,lj:0.0,fat:0.0,kh:55.0},
+  {id:"G06",name:"Coklat bubuk / kakao murni (unsweetened)",alt:"cocoa powder chocolate powder cacao coklat kakao unsweetened bubuk",cat:"Gula & Pemanis",tkpi:"MP004",g:16.3,na:125,lj:2.5,fat:4.0,kh:48.9},
+  {id:"G07",name:"Coklat manis batang (dark/semi-sweet)",alt:"dark chocolate coklat hitam batang dark choc sweet chocolate manis",cat:"Gula & Pemanis",tkpi:"MP001",g:56.2,na:6,lj:18.5,fat:29.8,kh:62.7},
+  {id:"G08",name:"Coklat susu batang (milk chocolate)",alt:"milk chocolate coklat susu batang bar",cat:"Gula & Pemanis",tkpi:"MP003",g:50.2,na:100,lj:21.7,fat:35.0,kh:53.6},
+
+  // 4.11 & 4.13 Minuman Dasar
+  {id:"M01",name:"Kopi instan (bubuk)",alt:"instant coffee nescafe kopi instan powder bubuk soluble",cat:"Minuman Dasar",tkpi:"MP009",g:35.0,na:72,lj:0.3,fat:0.5,kh:35.0},
+  {id:"M02",name:"Teh hijau (daun kering)",alt:"green tea teh hijau daun kering leaves dried",cat:"Minuman Dasar",tkpi:"MP016",g:44.0,na:60,lj:0.7,fat:4.8,kh:53.6},
+  {id:"M03",name:"Teh hitam (daun kering)",alt:"black tea teh hitam daun kering leaves dried tea",cat:"Minuman Dasar",tkpi:"MP017",g:50.1,na:50,lj:0.4,fat:2.8,kh:58.8},
+  {id:"M04",name:"Air putih / air mineral",alt:"water air putih mineral water plain",cat:"Minuman Dasar",tkpi:"—",g:0.0,na:0,lj:0.0,fat:0.0,kh:0.0},
+  {id:"M05",name:"Es batu",alt:"ice cubes es batu ice crushed",cat:"Minuman Dasar",tkpi:"—",g:0.0,na:0,lj:0.0,fat:0.0,kh:0.0},
+  {id:"M06",name:"Air kelapa muda (segar)",alt:"coconut water kelapa muda air degan young coconut segar",cat:"Minuman Dasar",tkpi:"QR001",g:3.8,na:1,lj:0.1,fat:0.1,kh:3.8},
+
+  // 4.9 Susu dan Hasil Olahannya
+  {id:"S01",name:"Susu sapi segar (whole milk)",alt:"fresh milk whole milk susu segar cow milk full cream sapi",cat:"Susu & Produk Susu",tkpi:"JR006",g:0.0,na:36,lj:2.3,fat:3.5,kh:4.3},
+  {id:"S02",name:"Susu kambing segar",alt:"goat milk susu kambing segar fresh",cat:"Susu & Produk Susu",tkpi:"JR003",g:0.0,na:35,lj:1.5,fat:2.3,kh:6.6},
+  {id:"S03",name:"Susu skim segar (low fat)",alt:"skim milk low fat milk susu skim segar nonfat fresh",cat:"Susu & Produk Susu",tkpi:"JP010",g:0.0,na:38,lj:0.1,fat:0.1,kh:5.1},
+  {id:"S04",name:"Susu kental manis (SKM)",alt:"condensed milk sweetened condensed milk SKM susu kental sweet manis",cat:"Susu & Produk Susu",tkpi:"JP007",g:40.0,na:150,lj:6.5,fat:10.0,kh:55.0},
+  {id:"S05",name:"Susu kental tak manis / evaporasi",alt:"evaporated milk susu evap kental tak manis unsweetened condensed evaporasi carnation",cat:"Susu & Produk Susu",tkpi:"JP008",g:0.0,na:140,lj:5.1,fat:7.9,kh:9.9},
+  {id:"S06",name:"Susu bubuk full cream",alt:"full cream milk powder susu bubuk whole milk powder dry",cat:"Susu & Produk Susu",tkpi:"JP006",g:0.0,na:380,lj:19.5,fat:30.0,kh:36.2},
+  {id:"S07",name:"Susu skim bubuk (non-fat dry milk)",alt:"skim milk powder non-fat dry milk susu skim bubuk dried",cat:"Susu & Produk Susu",tkpi:"JP009",g:0.0,na:470,lj:0.7,fat:1.0,kh:52.0},
+  {id:"S08",name:"Yoghurt segar (plain)",alt:"plain yogurt yoghurt segar greek yogurt",cat:"Susu & Produk Susu",tkpi:"JP011",g:0.0,na:40,lj:1.6,fat:2.5,kh:4.0},
+  {id:"S09",name:"Es krim (vanilla)",alt:"ice cream es krim vanilla",cat:"Susu & Produk Susu",tkpi:"JP001",g:11.0,na:78,lj:8.1,fat:12.5,kh:20.6},
+
+  // 4.10 Lemak dan Minyak
+  {id:"L01",name:"Santan (dengan air / encer)",alt:"coconut milk santan dengan air diluted kara encer",cat:"Lemak & Santan",tkpi:"KP003",g:7.6,na:9,lj:8.6,fat:10.0,kh:7.6},
+  {id:"L02",name:"Santan murni / kental (coconut cream)",alt:"coconut cream thick coconut milk santan murni kental full fat pekat",cat:"Lemak & Santan",tkpi:"KP004",g:5.6,na:18,lj:29.5,fat:34.3,kh:5.6},
+  {id:"L03",name:"Kelapa tua, daging parut segar",alt:"shredded coconut kelapa parut tua daging segar grated fresh",cat:"Lemak & Santan",tkpi:"KR002",g:9.3,na:3,lj:29.8,fat:34.7,kh:14.0},
+  {id:"L04",name:"Minyak kelapa (VCO / biasa)",alt:"coconut oil minyak kelapa VCO virgin coconut oil",cat:"Lemak & Santan",tkpi:"KR011",g:0.0,na:0,lj:84.3,fat:98.0,kh:0.0},
+  {id:"L05",name:"Mentega (butter)",alt:"butter mentega unsalted salted",cat:"Lemak & Santan",tkpi:"KP002",g:1.4,na:653,lj:53.0,fat:81.6,kh:1.4},
+  {id:"L06",name:"Margarin",alt:"margarine margarin",cat:"Lemak & Santan",tkpi:"KP001",g:0.4,na:760,lj:40.5,fat:81.0,kh:0.4},
+
+  // 4.5 Buah dan Hasil Olahannya
+  {id:"B01",name:"Alpukat, segar",alt:"avocado alpukat fresh segar",cat:"Buah",tkpi:"ER001",g:7.7,na:2,lj:1.0,fat:6.5,kh:7.7},
+  {id:"B02",name:"Mangga, segar",alt:"mango mangga harum manis fresh gedung golek segar",cat:"Buah",tkpi:"ER054",g:10.7,na:3,lj:0.0,fat:0.0,kh:12.3},
+  {id:"B03",name:"Jeruk manis, segar",alt:"orange sweet orange jeruk manis segar fresh",cat:"Buah",tkpi:"ER039",g:9.8,na:4,lj:0.0,fat:0.2,kh:11.2},
+  {id:"B04",name:"Jeruk nipis / lemon lokal, segar",alt:"lime jeruk nipis segar kalamansi local lemon",cat:"Buah",tkpi:"ER040",g:9.6,na:3,lj:0.0,fat:0.2,kh:10.0},
+  {id:"B05",name:"Lemon, segar",alt:"lemon segar fresh lemon juice perasan squeeze",cat:"Buah",tkpi:"ER052",g:6.1,na:31,lj:0.1,fat:0.8,kh:6.2},
+  {id:"B06",name:"Nanas, segar",alt:"pineapple nanas segar fresh",cat:"Buah",tkpi:"ER070",g:9.3,na:18,lj:0.0,fat:0.3,kh:9.9},
+  {id:"B07",name:"Pisang ambon, segar",alt:"banana pisang ambon cavendish segar fresh",cat:"Buah",tkpi:"ER074",g:22.4,na:10,lj:0.1,fat:0.8,kh:24.3},
+  {id:"B08",name:"Semangka, segar",alt:"watermelon semangka fresh segar",cat:"Buah",tkpi:"ER105",g:6.5,na:7,lj:0.0,fat:0.2,kh:6.9},
+  {id:"B09",name:"Melon, segar",alt:"melon cantaloupe honeydew segar fresh",cat:"Buah",tkpi:"ER067",g:6.8,na:27,lj:0.1,fat:0.4,kh:7.8},
+  {id:"B10",name:"Markisa, segar",alt:"passion fruit markisa fresh segar",cat:"Buah",tkpi:"ER065",g:18.4,na:37,lj:0.2,fat:1.2,kh:29.8},
+  {id:"B11",name:"Sirsak, segar",alt:"soursop sirsak segar fresh",cat:"Buah",tkpi:"ER106",g:13.1,na:2,lj:0.0,fat:0.3,kh:16.3},
+
+  // 4.12 Bumbu
+  {id:"R01",name:"Jahe, segar",alt:"fresh ginger jahe segar",cat:"Rempah & Bumbu",tkpi:"NR018",g:10.1,na:12,lj:0.2,fat:1.0,kh:10.1},
 ];
 
 // ============================================================
@@ -679,7 +674,7 @@ function searchTKPI(q) {
         <div class="dd-item" onclick="selectTKPI('${item.id}')">
           <div class="dd-name">${item.name}</div>
           <div class="dd-cat">${item.cat}</div>
-          <div class="dd-nutr">Gula: ${item.g}g &middot; Na: ${item.na}mg &middot; Lemak jenuh: ${item.lj}g &nbsp;(per 100 g bahan)</div>
+          <div class="dd-nutr">Gula≈${item.g}g &middot; Na:${item.na}mg &middot; LJ≈${item.lj}g /100g &nbsp;<span style="color:#9cc9b0">[TKPI ${item.tkpi}]</span></div>
         </div>`).join('');
     }
     dd.classList.add('open');
@@ -700,7 +695,7 @@ function selectTKPI(id){
   chip.classList.add('show');
   document.getElementById('chip-name').textContent=selIng.name;
   document.getElementById('chip-nutr').textContent=
-    `Gula: ${selIng.g}g \u00b7 Na: ${selIng.na}mg \u00b7 LJ: ${selIng.lj}g /100g`;
+    `TKPI ${selIng.tkpi} \u00b7 Gula≈${selIng.g}g \u00b7 Na:${selIng.na}mg \u00b7 LJ≈${selIng.lj}g per 100g`;
   document.getElementById('r-qty').focus();
 }
 

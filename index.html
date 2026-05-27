@@ -438,7 +438,10 @@ const TKPI = [
   //         • Susu kental manis: g ≈ 40 (estimasi sukrosa non-laktosa)
   //         • Santan/kelapa: g = KH (bukan laktosa)
   // lj  = estimasi lemak jenuh (g/100g): LEMAK(TKPI) × faktor saturasi per kategori
-  //         kelapa: 0.86 | susu: 0.65 | cocoa butter: 0.62 | nabati/buah: 0.15
+  //         kelapa: 0.92 (Lipids Health Dis 2022; ScienceDirect; IOP 2022)
+  //         susu:   0.70 (PMC 2024; Grummer 1991 via PMC 4597863)
+  //         cokelat:0.62 (PMC 6859180; cocoa butter 57–64% SFA)
+  //         nabati/buah: 0.15 (PMC 10340145 Hass avocado USDA)
   //   ⚠ TKPI 2017 TIDAK menyediakan kolom "Gula" maupun "Lemak Jenuh" secara langsung.
   //     Wajib verifikasi dengan uji laboratorium terakreditasi untuk pencantuman label resmi.
   // ────────────────────────────────────────────────────────────────────────────
@@ -446,7 +449,7 @@ const TKPI = [
   // 4.11 Gula, Sirup & Konfeksioneri
   {id:"G01",name:"Gula pasir / gula putih",alt:"gula putih tebu white sugar pasir refined",cat:"Gula & Pemanis",tkpi:"MP007",g:94.0,na:1,lj:0.0,fat:0.0,kh:94.0},
   {id:"G02",name:"Gula aren",alt:"aren sugar nira palm sugar coconut aren gula jawa merah brown palm",cat:"Gula & Pemanis",tkpi:"MP005",g:92.0,na:15,lj:0.0,fat:0.0,kh:92.0},
-  {id:"G03",name:"Gula kelapa",alt:"coconut sugar gula palem palm sugar kelapa jawa",cat:"Gula & Pemanis",tkpi:"MP006",g:76.0,na:2,lj:8.6,fat:10.0,kh:76.0},
+  {id:"G03",name:"Gula kelapa",alt:"coconut sugar gula palem palm sugar kelapa jawa",cat:"Gula & Pemanis",tkpi:"MP006",g:76.0,na:2,lj:9.2,fat:10.0,kh:76.0},
   {id:"G04",name:"Madu",alt:"honey madu lebah natural",cat:"Gula & Pemanis",tkpi:"MP010",g:79.5,na:6,lj:0.0,fat:0.0,kh:79.5},
   {id:"G05",name:"Sirup (umum / plain syrup)",alt:"sirup gula simple syrup sugar syrup larutan cair",cat:"Gula & Pemanis",tkpi:"MP014",g:55.0,na:3,lj:0.0,fat:0.0,kh:55.0},
   {id:"G06",name:"Coklat bubuk / kakao murni (unsweetened)",alt:"cocoa powder chocolate powder cacao coklat kakao unsweetened bubuk",cat:"Gula & Pemanis",tkpi:"MP004",g:16.3,na:125,lj:2.5,fat:4.0,kh:48.9},
@@ -462,21 +465,21 @@ const TKPI = [
   {id:"M06",name:"Air kelapa muda (segar)",alt:"coconut water kelapa muda air degan young coconut segar",cat:"Minuman Dasar",tkpi:"QR001",g:3.8,na:1,lj:0.1,fat:0.1,kh:3.8},
 
   // 4.9 Susu dan Hasil Olahannya
-  {id:"S01",name:"Susu sapi segar (whole milk)",alt:"fresh milk whole milk susu segar cow milk full cream sapi",cat:"Susu & Produk Susu",tkpi:"JR006",g:0.0,na:36,lj:2.3,fat:3.5,kh:4.3},
-  {id:"S02",name:"Susu kambing segar",alt:"goat milk susu kambing segar fresh",cat:"Susu & Produk Susu",tkpi:"JR003",g:0.0,na:35,lj:1.5,fat:2.3,kh:6.6},
+  {id:"S01",name:"Susu sapi segar (whole milk)",alt:"fresh milk whole milk susu segar cow milk full cream sapi",cat:"Susu & Produk Susu",tkpi:"JR006",g:0.0,na:36,lj:2.5,fat:3.5,kh:4.3},
+  {id:"S02",name:"Susu kambing segar",alt:"goat milk susu kambing segar fresh",cat:"Susu & Produk Susu",tkpi:"JR003",g:0.0,na:35,lj:1.6,fat:2.3,kh:6.6},
   {id:"S03",name:"Susu skim segar (low fat)",alt:"skim milk low fat milk susu skim segar nonfat fresh",cat:"Susu & Produk Susu",tkpi:"JP010",g:0.0,na:38,lj:0.1,fat:0.1,kh:5.1},
-  {id:"S04",name:"Susu kental manis (SKM)",alt:"condensed milk sweetened condensed milk SKM susu kental sweet manis",cat:"Susu & Produk Susu",tkpi:"JP007",g:40.0,na:150,lj:6.5,fat:10.0,kh:55.0},
-  {id:"S05",name:"Susu kental tak manis / evaporasi",alt:"evaporated milk susu evap kental tak manis unsweetened condensed evaporasi carnation",cat:"Susu & Produk Susu",tkpi:"JP008",g:0.0,na:140,lj:5.1,fat:7.9,kh:9.9},
-  {id:"S06",name:"Susu bubuk full cream",alt:"full cream milk powder susu bubuk whole milk powder dry",cat:"Susu & Produk Susu",tkpi:"JP006",g:0.0,na:380,lj:19.5,fat:30.0,kh:36.2},
+  {id:"S04",name:"Susu kental manis (SKM)",alt:"condensed milk sweetened condensed milk SKM susu kental sweet manis",cat:"Susu & Produk Susu",tkpi:"JP007",g:40.0,na:150,lj:7.0,fat:10.0,kh:55.0},
+  {id:"S05",name:"Susu kental tak manis / evaporasi",alt:"evaporated milk susu evap kental tak manis unsweetened condensed evaporasi carnation",cat:"Susu & Produk Susu",tkpi:"JP008",g:0.0,na:140,lj:5.5,fat:7.9,kh:9.9},
+  {id:"S06",name:"Susu bubuk full cream",alt:"full cream milk powder susu bubuk whole milk powder dry",cat:"Susu & Produk Susu",tkpi:"JP006",g:0.0,na:380,lj:21.0,fat:30.0,kh:36.2},
   {id:"S07",name:"Susu skim bubuk (non-fat dry milk)",alt:"skim milk powder non-fat dry milk susu skim bubuk dried",cat:"Susu & Produk Susu",tkpi:"JP009",g:0.0,na:470,lj:0.7,fat:1.0,kh:52.0},
-  {id:"S08",name:"Yoghurt segar (plain)",alt:"plain yogurt yoghurt segar greek yogurt",cat:"Susu & Produk Susu",tkpi:"JP011",g:0.0,na:40,lj:1.6,fat:2.5,kh:4.0},
-  {id:"S09",name:"Es krim (vanilla)",alt:"ice cream es krim vanilla",cat:"Susu & Produk Susu",tkpi:"JP001",g:11.0,na:78,lj:8.1,fat:12.5,kh:20.6},
+  {id:"S08",name:"Yoghurt segar (plain)",alt:"plain yogurt yoghurt segar greek yogurt",cat:"Susu & Produk Susu",tkpi:"JP011",g:0.0,na:40,lj:1.8,fat:2.5,kh:4.0},
+  {id:"S09",name:"Es krim (vanilla)",alt:"ice cream es krim vanilla",cat:"Susu & Produk Susu",tkpi:"JP001",g:11.0,na:78,lj:8.8,fat:12.5,kh:20.6},
 
   // 4.10 Lemak dan Minyak
-  {id:"L01",name:"Santan (dengan air / encer)",alt:"coconut milk santan dengan air diluted kara encer",cat:"Lemak & Santan",tkpi:"KP003",g:7.6,na:9,lj:8.6,fat:10.0,kh:7.6},
-  {id:"L02",name:"Santan murni / kental (coconut cream)",alt:"coconut cream thick coconut milk santan murni kental full fat pekat",cat:"Lemak & Santan",tkpi:"KP004",g:5.6,na:18,lj:29.5,fat:34.3,kh:5.6},
-  {id:"L03",name:"Kelapa tua, daging parut segar",alt:"shredded coconut kelapa parut tua daging segar grated fresh",cat:"Lemak & Santan",tkpi:"KR002",g:9.3,na:3,lj:29.8,fat:34.7,kh:14.0},
-  {id:"L04",name:"Minyak kelapa (VCO / biasa)",alt:"coconut oil minyak kelapa VCO virgin coconut oil",cat:"Lemak & Santan",tkpi:"KR011",g:0.0,na:0,lj:84.3,fat:98.0,kh:0.0},
+  {id:"L01",name:"Santan (dengan air / encer)",alt:"coconut milk santan dengan air diluted kara encer",cat:"Lemak & Santan",tkpi:"KP003",g:7.6,na:9,lj:9.2,fat:10.0,kh:7.6},
+  {id:"L02",name:"Santan murni / kental (coconut cream)",alt:"coconut cream thick coconut milk santan murni kental full fat pekat",cat:"Lemak & Santan",tkpi:"KP004",g:5.6,na:18,lj:31.6,fat:34.3,kh:5.6},
+  {id:"L03",name:"Kelapa tua, daging parut segar",alt:"shredded coconut kelapa parut tua daging segar grated fresh",cat:"Lemak & Santan",tkpi:"KR002",g:9.3,na:3,lj:31.9,fat:34.7,kh:14.0},
+  {id:"L04",name:"Minyak kelapa (VCO / biasa)",alt:"coconut oil minyak kelapa VCO virgin coconut oil",cat:"Lemak & Santan",tkpi:"KR011",g:0.0,na:0,lj:90.2,fat:98.0,kh:0.0},
   {id:"L05",name:"Mentega (butter)",alt:"butter mentega unsalted salted",cat:"Lemak & Santan",tkpi:"KP002",g:1.4,na:653,lj:53.0,fat:81.6,kh:1.4},
   {id:"L06",name:"Margarin",alt:"margarine margarin",cat:"Lemak & Santan",tkpi:"KP001",g:0.4,na:760,lj:40.5,fat:81.0,kh:0.4},
 
